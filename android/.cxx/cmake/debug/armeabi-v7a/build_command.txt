@@ -1,0 +1,23 @@
+                Executable : /Users/luao/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake
+arguments : 
+-H/Users/luao/Documents/Flutter/rplayer/src
+-DCMAKE_FIND_ROOT_PATH=/Users/luao/Documents/Flutter/rplayer/android/.cxx/cmake/debug/prefab/armeabi-v7a/prefab
+-DCMAKE_BUILD_TYPE=Debug
+-DCMAKE_TOOLCHAIN_FILE=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake
+-DANDROID_ABI=armeabi-v7a
+-DANDROID_NDK=/Users/luao/Library/Android/sdk/ndk/21.1.6352462
+-DANDROID_PLATFORM=android-16
+-DCMAKE_ANDROID_ARCH_ABI=armeabi-v7a
+-DCMAKE_ANDROID_NDK=/Users/luao/Library/Android/sdk/ndk/21.1.6352462
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a
+-DCMAKE_MAKE_PROGRAM=/Users/luao/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_SYSTEM_VERSION=16
+-DANDROID_ARM_NEON=TRUE
+-DANDROID_STL=c++_shared
+-B/Users/luao/Documents/Flutter/rplayer/android/.cxx/cmake/debug/armeabi-v7a
+-GNinja
+jvmArgs : 
+
+Build command args:

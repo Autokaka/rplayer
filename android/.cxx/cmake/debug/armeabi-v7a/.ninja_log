@@ -1,0 +1,4 @@
+# ninja log v5
+0	207	1618418246	CMakeFiles/rplayer.dir/player.cpp.o	991bccdcaf0358e6
+0	209	1618418246	CMakeFiles/rplayer.dir/decoder.cpp.o	7f5401a0d9249bba
+209	249	1618418247	/Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so	24eb4fe9b732c02
