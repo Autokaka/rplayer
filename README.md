@@ -1,15 +1,40 @@
 # rplayer
 
-A new flutter plugin project.
+Flutter RTSP low latency video player for Android TV only. This player is intended to use FFmpeg under the hood to decode RTSP streams and Android SurfaceView to draw in native code. If time permits, I'll try to use OpenGLES as its backend renderer and OpenSLES as its audio solution. For now I only achieved video decode part.
 
-## Getting Started
+## Plugin Design
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+### Decoder
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+#### decode
 
+1. Dart FFI + ffigen to bind native code with Flutter.
+2. Use binded code to control decode logic.
+3. Decoder thread create frame receive loop.
+
+### Player
+
+#### init()
+
+1. Flutter init player. 
+2. Dart FFI use native code to create a Surface on Android platform via JNI.
+3. Dart FFI use native code to get Flutter Plugin TextureEntry via JNI.
+4. Native code return TextureEntry id to Flutter.
+
+#### draw()
+
+1. Native code draw video picture on AWindow.
+2. Flutter use Texture(TextureEntry id) to display video view.
+
+## TODO:
+
+- [x] Precompile FFmpeg.
+- [x] Embed FFmpeg to Android platform.
+- [x] Generate Dart FFI bindings for Flutter Plugin.
+
+- [x] Implement decode RTSP video streams logic.
+- [ ] Init plugin on Android platform, return TextureEntry id to Flutter Plugin.
+- [ ] Draw image to Flutter External Texture.
+- [ ] RTSP low latency.
+- [ ] Make FFmpeg related shared libraries static, and link librplayer.so as a whole shared library.
+- [ ] Shrink librplayer.so size to about 2MB.
