@@ -18,16 +18,18 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  void play(
+  int initialize(
     ffi.Pointer<ffi.Int8> url,
   ) {
-    return _play(
+    return _initialize(
       url,
     );
   }
 
-  late final _play_ptr = _lookup<ffi.NativeFunction<_c_play>>('play');
-  late final _dart_play _play = _play_ptr.asFunction<_dart_play>();
+  late final _initialize_ptr =
+      _lookup<ffi.NativeFunction<_c_initialize>>('initialize');
+  late final _dart_initialize _initialize =
+      _initialize_ptr.asFunction<_dart_initialize>();
 
   ffi.Pointer<ffi.Int8> getFFmpegVersion() {
     return _getFFmpegVersion();
@@ -39,11 +41,11 @@ class NativeLibrary {
       _getFFmpegVersion_ptr.asFunction<_dart_getFFmpegVersion>();
 }
 
-typedef _c_play = ffi.Void Function(
+typedef _c_initialize = ffi.Int64 Function(
   ffi.Pointer<ffi.Int8> url,
 );
 
-typedef _dart_play = void Function(
+typedef _dart_initialize = int Function(
   ffi.Pointer<ffi.Int8> url,
 );
 

@@ -1,5 +1,4 @@
 #include "player.h"
-#include "decoder.h"
 
 extern "C" {
 FLUTTER_EXPORT char* getFFmpegVersion() {
@@ -23,8 +22,12 @@ FLUTTER_EXPORT char* getFFmpegVersion() {
   return version;
 }
 
-FLUTTER_EXPORT void play(char* url) {
+FLUTTER_EXPORT long initialize(char* url) {
+  ANativeWindow* nativeWindow;
+  long textureId = createWindowFromAndroid(&nativeWindow);
+  RplayerDart *rplayerDart = new RplayerDart(url, nativeWindow);
   pthread_t playThread;
-  pthread_create(&playThread, nullptr, decodeThread, (void*)url);
+  pthread_create(&playThread, nullptr, decodeThread, (void*)rplayerDart);
+  return textureId;
 }
 }

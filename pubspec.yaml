@@ -1,7 +1,7 @@
 name: rplayer
 description: RTSP low latency video player for Android TV.
 version: 0.0.1
-homepage:
+homepage: https://github.com/Autokaka/rplayer
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

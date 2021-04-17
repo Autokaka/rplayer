@@ -31,10 +31,11 @@ Flutter RTSP low latency video player for Android TV only. This player is intend
 - [x] Precompile FFmpeg.
 - [x] Embed FFmpeg to Android platform.
 - [x] Generate Dart FFI bindings for Flutter Plugin.
-
 - [x] Implement decode RTSP video streams logic.
-- [ ] Init plugin on Android platform, return TextureEntry id to Flutter Plugin.
-- [ ] Draw image to Flutter External Texture.
+- [x] Init plugin on Android platform, return TextureEntry id to Flutter Plugin.
+- [x] Draw image to Flutter External Texture.
 - [ ] RTSP low latency.
+- [ ] Video & Audio syncing.
+- [ ] Full Dart RPlayer control.
 - [ ] Make FFmpeg related shared libraries static, and link librplayer.so as a whole shared library.
 - [ ] Shrink librplayer.so size to about 2MB.

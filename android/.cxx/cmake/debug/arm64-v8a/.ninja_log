@@ -1,4 +1,0 @@
-# ninja log v5
-0	127	1618418247	CMakeFiles/rplayer.dir/player.cpp.o	5946a11b4e00489f
-0	131	1618418247	CMakeFiles/rplayer.dir/decoder.cpp.o	716b0da0a09808b8
-131	173	1618418247	/Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/arm64-v8a/librplayer.so	bee139ac851ebba8
