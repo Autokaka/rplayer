@@ -1,5 +1,5 @@
 // reference file for ffigen
 
 // player.h
-void play(char* url);
+long initialize(char* url);
 char* getFFmpegVersion();

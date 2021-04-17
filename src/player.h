@@ -3,6 +3,8 @@
 #include "flutter.h"
 #include "log.h"
 #include "decoder.h"
+#include "platform.h"
+#include "rplayer_dart.h"
 
 extern "C" {
 #include <libavcodec/version.h>
@@ -16,7 +18,7 @@ extern "C" {
 
 FLUTTER_EXPORT char* getFFmpegVersion();
 
-FLUTTER_EXPORT void play(char* url);
+FLUTTER_EXPORT long initialize(char* url);
 
 FLUTTER_EXPORT void stop();
 }

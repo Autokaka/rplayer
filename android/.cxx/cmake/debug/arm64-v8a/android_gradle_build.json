@@ -27,7 +27,17 @@
           "workingDirectoryOrdinal": 0
         },
         {
+          "src": "/Users/luao/Documents/Flutter/rplayer/src/platform.cpp",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        },
+        {
           "src": "/Users/luao/Documents/Flutter/rplayer/src/player.cpp",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        },
+        {
+          "src": "/Users/luao/Documents/Flutter/rplayer/src/rplayer_dart.cpp",
           "flagsOrdinal": 1,
           "workingDirectoryOrdinal": 0
         }

@@ -63,9 +63,23 @@ build CMakeFiles/rplayer.dir/decoder.cpp.o: CXX_COMPILER__rplayer /Users/luao/Do
   INCLUDES = -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include
   OBJECT_DIR = CMakeFiles/rplayer.dir
   OBJECT_FILE_DIR = CMakeFiles/rplayer.dir
+build CMakeFiles/rplayer.dir/platform.cpp.o: CXX_COMPILER__rplayer /Users/luao/Documents/Flutter/rplayer/src/platform.cpp || cmake_object_order_depends_target_rplayer
+  DEFINES = -Drplayer_EXPORTS
+  DEP_FILE = CMakeFiles/rplayer.dir/platform.cpp.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include
+  OBJECT_DIR = CMakeFiles/rplayer.dir
+  OBJECT_FILE_DIR = CMakeFiles/rplayer.dir
 build CMakeFiles/rplayer.dir/player.cpp.o: CXX_COMPILER__rplayer /Users/luao/Documents/Flutter/rplayer/src/player.cpp || cmake_object_order_depends_target_rplayer
   DEFINES = -Drplayer_EXPORTS
   DEP_FILE = CMakeFiles/rplayer.dir/player.cpp.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include
+  OBJECT_DIR = CMakeFiles/rplayer.dir
+  OBJECT_FILE_DIR = CMakeFiles/rplayer.dir
+build CMakeFiles/rplayer.dir/rplayer_dart.cpp.o: CXX_COMPILER__rplayer /Users/luao/Documents/Flutter/rplayer/src/rplayer_dart.cpp || cmake_object_order_depends_target_rplayer
+  DEFINES = -Drplayer_EXPORTS
+  DEP_FILE = CMakeFiles/rplayer.dir/rplayer_dart.cpp.o.d
   FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC
   INCLUDES = -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include
   OBJECT_DIR = CMakeFiles/rplayer.dir
@@ -78,7 +92,7 @@ build CMakeFiles/rplayer.dir/player.cpp.o: CXX_COMPILER__rplayer /Users/luao/Doc
 #############################################
 # Link the shared library /Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so
 
-build /Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so: CXX_SHARED_LIBRARY_LINKER__rplayer CMakeFiles/rplayer.dir/decoder.cpp.o CMakeFiles/rplayer.dir/player.cpp.o | /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libavcodec.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libavformat.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libavutil.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libswresample.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libswscale.so
+build /Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so: CXX_SHARED_LIBRARY_LINKER__rplayer CMakeFiles/rplayer.dir/decoder.cpp.o CMakeFiles/rplayer.dir/platform.cpp.o CMakeFiles/rplayer.dir/player.cpp.o CMakeFiles/rplayer.dir/rplayer_dart.cpp.o | /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libavcodec.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libavformat.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libavutil.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libswresample.so /Users/luao/Documents/Flutter/rplayer/src/ffmpeg/lib/armeabi-v7a/libswscale.so
   LANGUAGE_COMPILE_FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info
   LINK_FLAGS = -Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libgcc_real.a -Wl,--exclude-libs,libatomic.a -Wl,--build-id -Wl,--fatal-warnings -Wl,--exclude-libs,libunwind.a -Wl,--no-undefined -Qunused-arguments
   LINK_LIBRARIES = -landroid -llog -lavcodec -lavformat -lavutil -lswresample -lswscale -latomic -lm

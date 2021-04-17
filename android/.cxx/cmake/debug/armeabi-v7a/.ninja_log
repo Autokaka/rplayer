@@ -1,4 +1,9 @@
 # ninja log v5
-0	207	1618418246	CMakeFiles/rplayer.dir/player.cpp.o	991bccdcaf0358e6
-0	209	1618418246	CMakeFiles/rplayer.dir/decoder.cpp.o	7f5401a0d9249bba
-209	249	1618418247	/Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so	24eb4fe9b732c02
+2	130	1618637741	CMakeFiles/rplayer.dir/rplayer_dart.cpp.o	bd24033848108085
+1	179	1618637741	CMakeFiles/rplayer.dir/platform.cpp.o	d40a7cb639f90809
+1	302	1618637741	CMakeFiles/rplayer.dir/player.cpp.o	991bccdcaf0358e6
+1	317	1618637741	CMakeFiles/rplayer.dir/decoder.cpp.o	7f5401a0d9249bba
+317	356	1618637741	/Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so	cdce175fce3ceceb
+2	950	1618671072	CMakeFiles/rplayer.dir/platform.cpp.o	d40a7cb639f90809
+2	1058	1618671072	CMakeFiles/rplayer.dir/player.cpp.o	991bccdcaf0358e6
+1058	1223	1618671072	/Users/luao/Documents/Flutter/rplayer/example/build/rplayer/intermediates/cmake/debug/obj/armeabi-v7a/librplayer.so	cdce175fce3ceceb

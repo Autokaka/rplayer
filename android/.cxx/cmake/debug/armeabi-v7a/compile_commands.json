@@ -7,7 +7,19 @@
 
 {
   "directory": "/Users/luao/Documents/Flutter/rplayer/android/.cxx/cmake/debug/armeabi-v7a",
+  "command": "/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -Drplayer_EXPORTS -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles/rplayer.dir/platform.cpp.o -c /Users/luao/Documents/Flutter/rplayer/src/platform.cpp",
+  "file": "/Users/luao/Documents/Flutter/rplayer/src/platform.cpp"
+},
+
+{
+  "directory": "/Users/luao/Documents/Flutter/rplayer/android/.cxx/cmake/debug/armeabi-v7a",
   "command": "/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -Drplayer_EXPORTS -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles/rplayer.dir/player.cpp.o -c /Users/luao/Documents/Flutter/rplayer/src/player.cpp",
   "file": "/Users/luao/Documents/Flutter/rplayer/src/player.cpp"
+},
+
+{
+  "directory": "/Users/luao/Documents/Flutter/rplayer/android/.cxx/cmake/debug/armeabi-v7a",
+  "command": "/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=armv7-none-linux-androideabi16 --gcc-toolchain=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64 --sysroot=/Users/luao/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot  -Drplayer_EXPORTS -I/Users/luao/Documents/Flutter/rplayer/src/ffmpeg/include  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -march=armv7-a -mthumb -Wformat -Werror=format-security   -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles/rplayer.dir/rplayer_dart.cpp.o -c /Users/luao/Documents/Flutter/rplayer/src/rplayer_dart.cpp",
+  "file": "/Users/luao/Documents/Flutter/rplayer/src/rplayer_dart.cpp"
 }
 ]
