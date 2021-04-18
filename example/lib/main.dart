@@ -17,7 +17,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    textureId = player.initialize("rtsp://admin:admin@192.168.1.4:8554/live");
+    textureId =
+        player.initialize("rtsp://admin:admin@192.168.123.67:8554/live");
   }
 
   @override

@@ -34,7 +34,7 @@ Flutter RTSP low latency video player for Android TV only. This player is intend
 - [x] Implement decode RTSP video streams logic.
 - [x] Init plugin on Android platform, return TextureEntry id to Flutter Plugin.
 - [x] Draw image to Flutter External Texture.
-- [ ] RTSP low latency.
+- [x] RTSP low latency.
 - [ ] Video & Audio syncing.
 - [ ] Full Dart RPlayer control.
 - [ ] Make FFmpeg related shared libraries static, and link librplayer.so as a whole shared library.

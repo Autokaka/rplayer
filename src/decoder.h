@@ -10,7 +10,6 @@ extern "C" {
 #include <libavutil/imgutils.h>
 #include <libswscale/swscale.h>
 #include <pthread.h>
-#include <unistd.h>
 
 void* decodeThread(void* args);
 }
