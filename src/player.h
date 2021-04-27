@@ -1,24 +1,45 @@
 #pragma once
 
-#include "flutter.h"
-#include "log.h"
-#include "decoder.h"
-#include "platform.h"
-#include "rplayer_dart.h"
-
-extern "C" {
-#include <libavcodec/version.h>
-#include <libavfilter/version.h>
-#include <libavformat/version.h>
-#include <libavutil/imgutils.h>
-#include <libavutil/version.h>
-#include <libswresample/version.h>
-#include <libswscale/version.h>
 #include <pthread.h>
+#include <memory>
+#include "decoder.h"
+#include "decoder_c.h"
+#include "log.h"
+#include "texture/texture_android.h"
 
-FLUTTER_EXPORT char* getFFmpegVersion();
+class RPlayerState {
+ public:
+  static const int INIT = 0;
 
-FLUTTER_EXPORT long initialize(char* url);
+  static const int STOPPED = 1;
+  static const int BUFFERING = 2;
+  static const int PLAYING = 3;
 
-FLUTTER_EXPORT void stop();
-}
+  static const int PAUSED = 4;
+  static const int ERROR = 5;
+};
+
+class RPlayer {
+ public:
+  char* url;
+  int state = RPlayerState::INIT;
+  TextureAndroid* pTextureAndroid;
+  RPlayerDecoder* decoder;
+
+ private:
+  pthread_t _pid;
+
+ public:
+  static RPlayer* createInstance();
+  int createDecodeThread(char*);
+  int dispose();
+  int getHeight();
+  int getWidth();
+
+ public:
+  void setBuffering();
+  void setPlaying();
+  void setPaused();
+  void setError(const char*, ...);
+  void setStopped();
+};
