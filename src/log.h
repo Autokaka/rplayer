@@ -1,8 +1,16 @@
+#pragma once
+
 #include <android/log.h>
 
-#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, __FILE__, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, __FILE__, __VA_ARGS__)
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, __FILE__, __VA_ARGS__)
-#define LOGW(...) __android_log_print(ANDROID_LOG_WARN, __FILE__, __VA_ARGS__)
+extern "C" {
+#define LOGI(...) \
+  __android_log_print(ANDROID_LOG_INFO, "RPlayer_native", __VA_ARGS__)
+#define LOGE(...) \
+  __android_log_print(ANDROID_LOG_ERROR, "RPlayer_native", __VA_ARGS__)
+#define LOGD(...) \
+  __android_log_print(ANDROID_LOG_DEBUG, "RPlayer_native", __VA_ARGS__)
+#define LOGW(...) \
+  __android_log_print(ANDROID_LOG_WARN, "RPlayer_native", __VA_ARGS__)
 #define LOGV(...) \
-  __android_log_print(ANDROID_LOG_VERBOSE, __FILE__, __VA_ARGS__)
+  __android_log_print(ANDROID_LOG_VERBOSE, "RPlayer_native", __VA_ARGS__)
+}

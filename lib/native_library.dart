@@ -18,37 +18,201 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  int initialize(
-    ffi.Pointer<ffi.Int8> url,
+  /// Create RPlayer instance,
+  /// initialize its state, and
+  /// return that pointer to Dart
+  /// side.
+  ffi.Pointer<ffi.Void> RPlayer_createInstance() {
+    return _RPlayer_createInstance();
+  }
+
+  late final _RPlayer_createInstance_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_createInstance>>(
+          'RPlayer_createInstance');
+  late final _dart_RPlayer_createInstance _RPlayer_createInstance =
+      _RPlayer_createInstance_ptr.asFunction<_dart_RPlayer_createInstance>();
+
+  /// Create decode thread using FFmpeg.
+  ///
+  /// @param void* pPlayer.
+  /// @param char* url.
+  int RPlayer_createDecodeThread(
+    ffi.Pointer<ffi.Void> arg0,
+    ffi.Pointer<ffi.Int8> arg1,
   ) {
-    return _initialize(
-      url,
+    return _RPlayer_createDecodeThread(
+      arg0,
+      arg1,
     );
   }
 
-  late final _initialize_ptr =
-      _lookup<ffi.NativeFunction<_c_initialize>>('initialize');
-  late final _dart_initialize _initialize =
-      _initialize_ptr.asFunction<_dart_initialize>();
+  late final _RPlayer_createDecodeThread_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_createDecodeThread>>(
+          'RPlayer_createDecodeThread');
+  late final _dart_RPlayer_createDecodeThread _RPlayer_createDecodeThread =
+      _RPlayer_createDecodeThread_ptr.asFunction<
+          _dart_RPlayer_createDecodeThread>();
 
-  ffi.Pointer<ffi.Int8> getFFmpegVersion() {
-    return _getFFmpegVersion();
+  void RPlayer_setPlaying(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_setPlaying(
+      arg0,
+    );
   }
 
-  late final _getFFmpegVersion_ptr =
-      _lookup<ffi.NativeFunction<_c_getFFmpegVersion>>('getFFmpegVersion');
-  late final _dart_getFFmpegVersion _getFFmpegVersion =
-      _getFFmpegVersion_ptr.asFunction<_dart_getFFmpegVersion>();
+  late final _RPlayer_setPlaying_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_setPlaying>>('RPlayer_setPlaying');
+  late final _dart_RPlayer_setPlaying _RPlayer_setPlaying =
+      _RPlayer_setPlaying_ptr.asFunction<_dart_RPlayer_setPlaying>();
+
+  void RPlayer_setPaused(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_setPaused(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_setPaused_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_setPaused>>('RPlayer_setPaused');
+  late final _dart_RPlayer_setPaused _RPlayer_setPaused =
+      _RPlayer_setPaused_ptr.asFunction<_dart_RPlayer_setPaused>();
+
+  /// Release all resources used in decode thread.
+  int RPlayer_dispose(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_dispose(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_dispose_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_dispose>>('RPlayer_dispose');
+  late final _dart_RPlayer_dispose _RPlayer_dispose =
+      _RPlayer_dispose_ptr.asFunction<_dart_RPlayer_dispose>();
+
+  int RPlayer_getHeight(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_getHeight(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_getHeight_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_getHeight>>('RPlayer_getHeight');
+  late final _dart_RPlayer_getHeight _RPlayer_getHeight =
+      _RPlayer_getHeight_ptr.asFunction<_dart_RPlayer_getHeight>();
+
+  int RPlayer_getWidth(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_getWidth(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_getWidth_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_getWidth>>('RPlayer_getWidth');
+  late final _dart_RPlayer_getWidth _RPlayer_getWidth =
+      _RPlayer_getWidth_ptr.asFunction<_dart_RPlayer_getWidth>();
+
+  int RPlayer_getState(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_getState(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_getState_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_getState>>('RPlayer_getState');
+  late final _dart_RPlayer_getState _RPlayer_getState =
+      _RPlayer_getState_ptr.asFunction<_dart_RPlayer_getState>();
+
+  int RPlayer_getTextureId(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_getTextureId(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_getTextureId_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_getTextureId>>(
+          'RPlayer_getTextureId');
+  late final _dart_RPlayer_getTextureId _RPlayer_getTextureId =
+      _RPlayer_getTextureId_ptr.asFunction<_dart_RPlayer_getTextureId>();
 }
 
-typedef _c_initialize = ffi.Int64 Function(
-  ffi.Pointer<ffi.Int8> url,
+typedef _c_RPlayer_createInstance = ffi.Pointer<ffi.Void> Function();
+
+typedef _dart_RPlayer_createInstance = ffi.Pointer<ffi.Void> Function();
+
+typedef _c_RPlayer_createDecodeThread = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Pointer<ffi.Int8> arg1,
 );
 
-typedef _dart_initialize = int Function(
-  ffi.Pointer<ffi.Int8> url,
+typedef _dart_RPlayer_createDecodeThread = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Pointer<ffi.Int8> arg1,
 );
 
-typedef _c_getFFmpegVersion = ffi.Pointer<ffi.Int8> Function();
+typedef _c_RPlayer_setPlaying = ffi.Void Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
 
-typedef _dart_getFFmpegVersion = ffi.Pointer<ffi.Int8> Function();
+typedef _dart_RPlayer_setPlaying = void Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_setPaused = ffi.Void Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_setPaused = void Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_dispose = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_dispose = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_getHeight = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_getHeight = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_getWidth = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_getWidth = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_getState = ffi.Int32 Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_getState = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_getTextureId = ffi.Int64 Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_getTextureId = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+);

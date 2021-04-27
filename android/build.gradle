@@ -30,7 +30,7 @@ android {
     sourceSets {
         main {
             java.srcDirs += 'src/main/kotlin'
-            jniLibs.srcDirs = ['../src/ffmpeg/lib']
+            jniLibs.srcDirs = ['../src/third-party/ffmpeg/lib']
         }
     }
     defaultConfig {

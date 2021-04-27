@@ -16,7 +16,7 @@ ffigen:
   output: 'lib/native_library.dart'
   headers:
     entry-points:
-      - 'src/ffi_export.h'
+      - 'src/ffi/ffi_export.h'
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
