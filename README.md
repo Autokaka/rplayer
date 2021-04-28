@@ -38,5 +38,5 @@ Flutter RTSP low latency video player for Android TV only. This player is intend
 - [x] Full Dart RPlayer control.
 - [ ] Functional RPlayerView.
 - [ ] Video & Audio syncing.
-- [ ] Make FFmpeg related shared libraries static, and link librplayer.so as a whole shared library.
-- [ ] Shrink librplayer.so size to about 2MB.
+- [x] ~~Make FFmpeg related shared libraries static, and link librplayer.so as a whole shared library.~~ (Still make separate shared library).
+- [x] ~~Shrink librplayer.so size to about 2MB.~~ (Unable to achieve that, shrink to about 10MB).

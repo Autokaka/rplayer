@@ -14,7 +14,12 @@ file(GLOB SRC
   "${PROJECT_SOURCE_DIR}/texture/*.cpp"
 )
 add_library(rplayer SHARED ${SRC})
-target_link_libraries(rplayer PUBLIC ffmpeg)
+target_link_libraries(rplayer PUBLIC  
+  android
+  log
+  z
+  ffmpeg
+)
 target_include_directories(rplayer
   PUBLIC ${PROJECT_SOURCE_DIR}/ffi
   PRIVATE ${PROJECT_SOURCE_DIR}
