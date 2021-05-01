@@ -52,6 +52,8 @@ long RPlayer_getTextureId(void*);
  * See [src/config.h] for the definitions
  * of RPlayerConfig.
  */
-void* RplayerConfig_createInstance();
+void* RPlayerConfig_createInstance();
 
-void RplayerConfig_setRetryTimesOnDisconnect(void*, int);
+void RPlayerConfig_setRetryTimesOnDisconnect(void*, int);
+
+void RPlayerConfig_setRetryDelayInMilliseconds(void*, int);

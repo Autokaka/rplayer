@@ -34,35 +34,9 @@ int RPlayer::dispose() {
         "error when you create a decode thread from RPlayer next time.");
   }
 
-  if (decoder == nullptr) {
-    return 0;
+  if (decoder != nullptr) {
+    decoder->release();
   }
-
-  if (decoder->swsContext != nullptr) {
-    sws_freeContext(decoder->swsContext);
-  }
-
-  if (decoder->outFrame != nullptr) {
-    av_frame_free(&(decoder->outFrame));
-  }
-
-  if (decoder->frame != nullptr) {
-    av_frame_free(&(decoder->frame));
-  }
-
-  if (decoder->packet != nullptr) {
-    av_packet_free(&(decoder->packet));
-  }
-
-  if (decoder->codecContext != nullptr) {
-    avcodec_free_context(&(decoder->codecContext));
-  }
-
-  if (decoder->formatContext != nullptr) {
-    avformat_close_input(&(decoder->formatContext));
-    avformat_free_context(decoder->formatContext);
-  }
-
   return 0;
 }
 

@@ -73,16 +73,25 @@ DART_EXPORT long RPlayer_getTextureId(void* p) {
 // RPlayerConfig
 //////////////////////////////////////////
 
-DART_EXPORT void* RplayerConfig_createInstance() {
+DART_EXPORT void* RPlayerConfig_createInstance() {
   return static_cast<void*>(new RPlayerConfig());
 }
 
-DART_EXPORT void RplayerConfig_setRetryTimesOnDisconnect(void* c, int value) {
+DART_EXPORT void RPlayerConfig_setRetryTimesOnDisconnect(void* c, int value) {
   if (value < 0) {
     return;
   }
 
   RPlayerConfig* pConfig = static_cast<RPlayerConfig*>(c);
   pConfig->retryTimesOnDisconnect = value;
+}
+
+DART_EXPORT void RPlayerConfig_setRetryDelayInMilliseconds(void* c, int value) {
+    if (value < 0) {
+        return;
+    }
+
+    RPlayerConfig* pConfig = static_cast<RPlayerConfig*>(c);
+    pConfig->retryDelayInMilliseconds = value;
 }
 }

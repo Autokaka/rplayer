@@ -36,7 +36,9 @@ DART_EXPORT long RPlayer_getTextureId(void*);
 // RPlayerConfig
 //////////////////////////////////////////
 
-DART_EXPORT void* RplayerConfig_createInstance();
+DART_EXPORT void* RPlayerConfig_createInstance();
 
-DART_EXPORT void RplayerConfig_setRetryTimesOnDisconnect(void*, int);
+DART_EXPORT void RPlayerConfig_setRetryTimesOnDisconnect(void*, int);
+
+DART_EXPORT void RPlayerConfig_setRetryDelayInMilliseconds(void*, int);
 }

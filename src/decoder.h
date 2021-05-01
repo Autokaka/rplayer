@@ -17,4 +17,7 @@ class RPlayerDecoder {
 
   AVFrame* frame;
   AVPacket* packet;
+
+ public:
+  void release();
 };

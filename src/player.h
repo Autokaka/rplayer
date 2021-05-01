@@ -4,7 +4,7 @@
 #include <memory>
 #include "config.h"
 #include "decoder.h"
-#include "decoder_c.h"
+#include "decoder_thread.h"
 #include "texture/texture_android.h"
 #include "util/log.h"
 
@@ -43,6 +43,6 @@ class RPlayer {
   void setBuffering();
   void setPlaying();
   void setPaused();
-  void setError(const char*, ...);
   void setStopped();
+  void setError(const char*, ...);
 };

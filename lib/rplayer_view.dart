@@ -43,38 +43,36 @@ class _RPlayerViewState extends State<RPlayerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: "Texture_$textureId",
-      child: Container(
-        height: widget.height,
-        width: widget.width,
-        color: Colors.black,
-        child: Stack(
-          children: [
-            Center(
-              child: (widget.player.textureId >= 0)
-                  ? AspectRatio(
-                      aspectRatio: widget.player.size.aspectRatio,
-                      child: Texture(textureId: textureId),
-                    )
-                  : (widget.player.state == RPlayerState.ERROR)
-                  ? widget.error ??
-                      Center(
-                        child: Text(
-                          "Error: ${widget.player.message}",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                  : widget.placeholder ??
-                      SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: CircularProgressIndicator(),
+    return Container(
+      height: widget.height,
+      width: widget.width,
+      color: Colors.black,
+      child: Stack(
+        children: [
+          Center(
+            child: (widget.player.size != Size.zero &&
+                    widget.player.textureId >= 0)
+                ? AspectRatio(
+                    aspectRatio: widget.player.size.aspectRatio,
+                    child: Texture(textureId: textureId),
+                  )
+                : (widget.player.state == RPlayerState.ERROR)
+                ? widget.error ??
+                    Center(
+                      child: Text(
+                        "Error: ${widget.player.message}",
+                        style: TextStyle(color: Colors.white),
                       ),
-            ),
-            widget.child,
-          ],
-        ),
+                    )
+                : widget.placeholder ??
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: CircularProgressIndicator(),
+                    ),
+          ),
+          widget.child,
+        ],
       ),
     );
   }

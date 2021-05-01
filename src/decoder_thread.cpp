@@ -1,4 +1,4 @@
-#include "decoder_c.h"
+#include "decoder_thread.h"
 
 void* _decode(void* args) {
   RPlayer* pPlayer = static_cast<RPlayer*>(args);
@@ -11,6 +11,10 @@ void* _decode(void* args) {
   pPlayer->decoder->formatContext = avformat_alloc_context();
   if (int openResult = avformat_open_input(&(pPlayer->decoder->formatContext),
                                            pPlayer->url, NULL, NULL) < 0) {
+    if (pPlayer->config != nullptr &&
+        pPlayer->config->retryTimesOnDisconnect > 0) {
+      return _retryDecode(static_cast<void*>(pPlayer));
+    }
     pPlayer->setError("Failed on avformat_open_input: %s",
                       av_err2str(openResult));
     return nullptr;
@@ -187,17 +191,30 @@ void* _decode(void* args) {
   }
 
   /**
-   * If loop is breaked without STOPPED or ERROR flag,
+   * If loop is broken without STOPPED or ERROR flag,
    * we need to consider relinking to previous stream.
    */
-  if (pPlayer->state != RPlayerState::STOPPED &&
-      pPlayer->state != RPlayerState::ERROR && pPlayer->config != nullptr &&
-      pPlayer->config->retryTimesOnDisconnect > 0) {
-      pPlayer->setBuffering();
-      strcpy(pPlayer->msg, "Lost connection. Retrying...");
-      pPlayer->config->retryTimesOnDisconnect--;
-      return _decode(static_cast<void*>(pPlayer));
-  }
+  _retryDecode(static_cast<void*>(pPlayer));
 
   return nullptr;
+}
+
+void* _retryDecode(void* args) {
+  RPlayer* pPlayer = static_cast<RPlayer*>(args);
+
+  if (pPlayer->state == RPlayerState::STOPPED ||
+      pPlayer->state == RPlayerState::ERROR || pPlayer->config == nullptr ||
+      pPlayer->config->retryTimesOnDisconnect <= 0) {
+    return nullptr;
+  }
+
+  // FIXME: [luao] retryTimesOnDisconnect won't be reset to previous value when
+  // stream is shutdown multiple times in one play.
+  usleep(pPlayer->config->retryDelayInMilliseconds * 1000);
+  pPlayer->config->retryTimesOnDisconnect--;
+  sprintf(pPlayer->msg, "Lost connection. Retrying... (%d times left)",
+          pPlayer->config->retryTimesOnDisconnect);
+  LOG::D(pPlayer->msg);
+  pPlayer->decoder->release();
+  return _decode(static_cast<void*>(pPlayer));
 }
