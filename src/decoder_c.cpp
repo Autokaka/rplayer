@@ -32,8 +32,8 @@ void* _decode(void* args) {
     return nullptr;
   }
   int videoStreamIndex = -1;
-  LOGD("Current video streams: %d",
-       pPlayer->decoder->formatContext->nb_streams);
+  LOG::D("Current video streams: %d",
+         pPlayer->decoder->formatContext->nb_streams);
   for (int i = 0; i < pPlayer->decoder->formatContext->nb_streams; i++) {
     if (pPlayer->decoder->formatContext->streams[i]->codecpar->codec_type ==
         AVMEDIA_TYPE_VIDEO) {
@@ -133,14 +133,14 @@ void* _decode(void* args) {
     if (int sendPacketState =
             avcodec_send_packet(pPlayer->decoder->codecContext,
                                 pPlayer->decoder->packet) != 0) {
-      LOGE("Failed to send packet: code %d.", sendPacketState);
+      LOG::E("Failed to send packet: code %d.", sendPacketState);
       av_packet_unref(pPlayer->decoder->packet);
       continue;
     }
     if (int receiveFrameState =
             avcodec_receive_frame(pPlayer->decoder->codecContext,
                                   pPlayer->decoder->frame) != 0) {
-      LOGE("Failed to receive frame: code %d.", receiveFrameState);
+      LOG::E("Failed to receive frame: code %d.", receiveFrameState);
       av_packet_unref(pPlayer->decoder->packet);
       continue;
     }

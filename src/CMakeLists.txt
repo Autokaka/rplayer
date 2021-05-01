@@ -12,6 +12,8 @@ file(GLOB SRC
   "${PROJECT_SOURCE_DIR}/plugin/*.cpp"
   "${PROJECT_SOURCE_DIR}/texture/*.h"
   "${PROJECT_SOURCE_DIR}/texture/*.cpp"
+  "${PROJECT_SOURCE_DIR}/util/*.h"
+  "${PROJECT_SOURCE_DIR}/util/*.cpp"
 )
 add_library(rplayer SHARED ${SRC})
 target_link_libraries(rplayer PUBLIC  

@@ -2,9 +2,7 @@
 
 #include "player.h"
 
-#define DART_EXPORT \
-  __attribute__((visibility("default"))) \
-  __attribute__((used))
+#define DART_EXPORT __attribute__((visibility("default"))) __attribute__((used))
 
 extern "C" {
 DART_EXPORT void* RPlayer_createInstance();
