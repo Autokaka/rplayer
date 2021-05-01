@@ -2,6 +2,7 @@
 
 #include <pthread.h>
 #include <memory>
+#include "config.h"
 #include "decoder.h"
 #include "decoder_c.h"
 #include "texture/texture_android.h"
@@ -26,6 +27,7 @@ class RPlayer {
   int state = RPlayerState::INIT;
   TextureAndroid* pTextureAndroid;
   RPlayerDecoder* decoder;
+  RPlayerConfig* config;
 
  private:
   pthread_t _pid;

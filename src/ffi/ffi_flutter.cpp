@@ -1,6 +1,10 @@
 #include "ffi_flutter.h"
 
 extern "C" {
+//////////////////////////////////////////
+// RPlayer
+//////////////////////////////////////////
+
 DART_EXPORT void* RPlayer_createInstance() {
   return static_cast<void*>(RPlayer::createInstance());
 }
@@ -16,8 +20,16 @@ DART_EXPORT void RPlayer_setPlaying(void* p) {
 }
 
 DART_EXPORT void RPlayer_setPaused(void* p) {
-  RPlayer* pPlayer = static_cast<RPlayer*>(p);
+  RPlayer *pPlayer = static_cast<RPlayer *>(p);
   pPlayer->setPaused();
+}
+
+DART_EXPORT void RPlayer_setConfig(void* p, void* c) {
+  RPlayer* pPlayer = static_cast<RPlayer*>(p);
+  if (pPlayer->config != nullptr) {
+    delete pPlayer->config;
+  }
+  pPlayer->config = static_cast<RPlayerConfig*>(c);
 }
 
 DART_EXPORT int RPlayer_dispose(void* p) {
@@ -55,5 +67,22 @@ DART_EXPORT long RPlayer_getTextureId(void* p) {
     return -1;
   }
   return static_cast<long>(pPlayer->pTextureAndroid->id);
+}
+
+//////////////////////////////////////////
+// RPlayerConfig
+//////////////////////////////////////////
+
+DART_EXPORT void* RplayerConfig_createInstance() {
+  return static_cast<void*>(new RPlayerConfig());
+}
+
+DART_EXPORT void RplayerConfig_setRetryTimesOnDisconnect(void* c, int value) {
+  if (value < 0) {
+    return;
+  }
+
+  RPlayerConfig* pConfig = static_cast<RPlayerConfig*>(c);
+  pConfig->retryTimesOnDisconnect = value;
 }
 }

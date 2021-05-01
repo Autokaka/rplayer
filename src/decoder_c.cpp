@@ -121,10 +121,15 @@ void* _decode(void* args) {
   pPlayer->setPlaying();
   pPlayer->decoder->frame = av_frame_alloc();
   pPlayer->decoder->packet = av_packet_alloc();
-  while (pPlayer->state != RPlayerState::STOPPED &&
-         pPlayer->state != RPlayerState::ERROR &&
-         av_read_frame(pPlayer->decoder->formatContext,
+  while (av_read_frame(pPlayer->decoder->formatContext,
                        pPlayer->decoder->packet) == 0) {
+    if (pPlayer->state == RPlayerState::STOPPED ||
+        pPlayer->state == RPlayerState::ERROR) {
+      LOG::D("Decoder thread will be terminated: RPlayerState %d",
+             pPlayer->state);
+      av_packet_unref(pPlayer->decoder->packet);
+      return nullptr;
+    }
     if (pPlayer->decoder->packet->stream_index != videoStreamIndex ||
         pPlayer->state == RPlayerState::PAUSED) {
       av_packet_unref(pPlayer->decoder->packet);
@@ -179,6 +184,19 @@ void* _decode(void* args) {
       return nullptr;
     }
     av_packet_unref(pPlayer->decoder->packet);
+  }
+
+  /**
+   * If loop is breaked without STOPPED or ERROR flag,
+   * we need to consider relinking to previous stream.
+   */
+  if (pPlayer->state != RPlayerState::STOPPED &&
+      pPlayer->state != RPlayerState::ERROR && pPlayer->config != nullptr &&
+      pPlayer->config->retryTimesOnDisconnect > 0) {
+      pPlayer->setBuffering();
+      strcpy(pPlayer->msg, "Lost connection. Retrying...");
+      pPlayer->config->retryTimesOnDisconnect--;
+      return _decode(static_cast<void*>(pPlayer));
   }
 
   return nullptr;

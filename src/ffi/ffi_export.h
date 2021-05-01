@@ -3,6 +3,10 @@
  * Real header file is in `ffi_flutter.h`.
  */
 
+//////////////////////////////////////////
+// RPlayer
+//////////////////////////////////////////
+
 /**
  * Create RPlayer instance,
  * initialize its state, and
@@ -23,6 +27,8 @@ void RPlayer_setPlaying(void*);
 
 void RPlayer_setPaused(void*);
 
+void RPlayer_setConfig(void*, void*);
+
 /**
  * Release all resources used in decode thread.
  */
@@ -37,3 +43,15 @@ int RPlayer_getState(void*);
 char* RPlayer_getMessage(void*);
 
 long RPlayer_getTextureId(void*);
+
+//////////////////////////////////////////
+// RPlayerConfig
+//////////////////////////////////////////
+
+/**
+ * See [src/config.h] for the definitions
+ * of RPlayerConfig.
+ */
+void* RplayerConfig_createInstance();
+
+void RplayerConfig_setRetryTimesOnDisconnect(void*, int);

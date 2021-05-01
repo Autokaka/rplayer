@@ -8,15 +8,23 @@ import 'package:flutter/material.dart';
 
 import 'package:rplayer/native_library.dart';
 
+part 'rplayer_config.dart';
 part 'rplayer_state.dart';
 part 'rplayer_view.dart';
 
+final _lib = NativeLibrary(DynamicLibrary.open("librplayer.so"));
+
 class RPlayer with ChangeNotifier {
-  static final _lib = NativeLibrary(DynamicLibrary.open("librplayer.so"));
   final Pointer<Void> _pNativePlayer;
   late final Timer _observer;
 
-  RPlayer() : _pNativePlayer = _lib.RPlayer_createInstance() {
+  RPlayer({
+    RPlayerConfig? config,
+  }) : _pNativePlayer = _lib.RPlayer_createInstance() {
+    if (config != null) {
+      setConfig(config);
+    }
+
     _observer = Timer.periodic(Duration(seconds: 1), (_) {
       notifyListeners();
     });
@@ -54,6 +62,18 @@ class RPlayer with ChangeNotifier {
       _pNativePlayer,
       url.toNativeUtf8().cast<Int8>(),
     );
+  }
+
+  void continuePlay() {
+    _lib.RPlayer_setPlaying(_pNativePlayer);
+  }
+
+  void pause() {
+    _lib.RPlayer_setPaused(_pNativePlayer);
+  }
+
+  void setConfig(RPlayerConfig config) {
+    _lib.RPlayer_setConfig(_pNativePlayer, config._pNativeConfig);
   }
 
   @override
