@@ -11,6 +11,7 @@ int RPlayer::createDecodeThread(char* urlIn) {
     dispose();
     state = RPlayerState::INIT;
   }
+
   url = urlIn;
   return pthread_create(&_pid, nullptr, _decode, static_cast<void*>(this));
 }
@@ -25,8 +26,9 @@ int RPlayer::dispose() {
     setError("Failed to detach decode thread: code %d.", threadReturn);
   }
 
-  if (pTextureAndroid != nullptr &&
-      PluginAndroid::releaseTextureAndroid(pTextureAndroid) != 0) {
+  LOGD("Decode thread finished. PID: %ld", _pid);
+
+  if (pTextureAndroid != nullptr && pTextureAndroid->release() != 0) {
     setError(
         "Failed to release native window. This might cause unpredictable "
         "error when you create a decode thread from RPlayer next time.");

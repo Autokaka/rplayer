@@ -1,28 +1,45 @@
 #include "texture_android.h"
 
-jclass TextureAndroid::_clazz;
+jclass TextureAndroid::_TextureAndroidClass;
 
 void TextureAndroid::FFIRegister(JNIEnv* env) {
   jclass TextureAndroidClass =
-      env->FindClass("com/example/rplayer/FlutterExternalTexture");
-  _clazz = static_cast<jclass>(env->NewGlobalRef(TextureAndroidClass));
+      env->FindClass("com/example/rplayer/TextureAndroid");
+  _TextureAndroidClass = reinterpret_cast<jclass>(env->NewGlobalRef(TextureAndroidClass));
 }
 
-TextureAndroid::TextureAndroid(JNIEnv* env, jobject obj) {
-  thisObj = env->NewGlobalRef(obj);
+void TextureAndroid::FFIUnregister(JNIEnv* env) {
+    env->DeleteGlobalRef(_TextureAndroidClass);
+}
 
-  jfieldID surface_FID =
-      env->GetFieldID(_clazz, "surface", "Landroid/view/Surface;");
-  jobject surface = env->GetObjectField(thisObj, surface_FID);
+TextureAndroid::TextureAndroid() {
+  FFI_ENV_ATTACH()
+
+  jmethodID createTextureAndroid = env->GetMethodID(_TextureAndroidClass, "<init>", "()V");
+  _textureAndroid = env->NewObject(_TextureAndroidClass, createTextureAndroid);
+  _textureAndroid = env->NewGlobalRef(_textureAndroid);
+
+  jfieldID surfaceField = env->GetFieldID(_TextureAndroidClass, "surface", "Landroid/view/Surface;");
+  jobject surface;
+  while ((surface = env->GetObjectField(_textureAndroid, surfaceField)) == NULL);
+
+  jfieldID idField = env->GetFieldID(_TextureAndroidClass, "id", "J");
+  id = static_cast<long>(env->GetLongField(_textureAndroid, idField));
+
   nativeWindow = ANativeWindow_fromSurface(env, surface);
+
+  FFI_ENV_DETACH()
 }
 
-jlong TextureAndroid::getId() {
+int TextureAndroid::release() {
   FFI_ENV_ATTACH(-1)
 
-  jfieldID id_FID = env->GetFieldID(_clazz, "id", "J");
-  jlong id = env->GetLongField(thisObj, id_FID);
+  ANativeWindow_release(nativeWindow);
+  jmethodID release =
+      env->GetMethodID(_TextureAndroidClass, "release", "()V");
+  env->CallVoidMethod(_textureAndroid, release);
+  env->DeleteGlobalRef(_textureAndroid);
 
   FFI_ENV_DETACH(-1)
-  return id;
+  return 0;
 }

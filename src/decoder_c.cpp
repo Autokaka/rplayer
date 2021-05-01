@@ -103,11 +103,7 @@ void* _decode(void* args) {
   /**
    * Create buffer for nativeWindow to draw in later loop.
    */
-  if ((pPlayer->pTextureAndroid = PluginAndroid::createTextureAndroid()) ==
-      nullptr) {
-    pPlayer->setError("Failed to create Texture on Android platform.");
-    return nullptr;
-  }
+  pPlayer->pTextureAndroid = new TextureAndroid();
   ANativeWindow_Buffer nativeWindowBuffer;
   // Setting the display size by its pixels rather than physics size.
   // This means if your physics size is not the same as your display size,
@@ -185,6 +181,5 @@ void* _decode(void* args) {
     av_packet_unref(pPlayer->decoder->packet);
   }
 
-  LOGD("Decode thread finished. PID: %ld", pthread_self());
   return nullptr;
 }
