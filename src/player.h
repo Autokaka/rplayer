@@ -4,8 +4,8 @@
 #include <memory>
 #include "decoder.h"
 #include "decoder_c.h"
-#include "log.h"
 #include "texture/texture_android.h"
+#include "util/log.h"
 
 class RPlayerState {
  public:
@@ -22,6 +22,7 @@ class RPlayerState {
 class RPlayer {
  public:
   char* url;
+  char msg[1024];
   int state = RPlayerState::INIT;
   TextureAndroid* pTextureAndroid;
   RPlayerDecoder* decoder;

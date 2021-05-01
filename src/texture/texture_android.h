@@ -4,7 +4,7 @@
 #include <jni.h>
 
 #include "ffi/ffi_android.h"
-#include "log.h"
+#include "util/log.h"
 
 class TextureAndroid {
  private:

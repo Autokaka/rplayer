@@ -44,6 +44,11 @@ DART_EXPORT int RPlayer_getState(void* p) {
   return pPlayer->state;
 }
 
+DART_EXPORT char* RPlayer_getMessage(void*p) {
+  RPlayer* pPlayer = static_cast<RPlayer*>(p);
+  return pPlayer->msg;
+}
+
 DART_EXPORT long RPlayer_getTextureId(void* p) {
   RPlayer* pPlayer = static_cast<RPlayer*>(p);
   if (pPlayer->pTextureAndroid == nullptr) {

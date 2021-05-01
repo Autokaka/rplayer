@@ -45,6 +45,10 @@ class RPlayer with ChangeNotifier {
     return _lib.RPlayer_getHeight(_pNativePlayer);
   }
 
+  String get message {
+    return _lib.RPlayer_getMessage(_pNativePlayer).cast<Utf8>().toDartString();
+  }
+
   int startPlayWhenReady(String url) {
     return _lib.RPlayer_createDecodeThread(
       _pNativePlayer,

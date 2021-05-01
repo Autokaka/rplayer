@@ -132,6 +132,19 @@ class NativeLibrary {
   late final _dart_RPlayer_getState _RPlayer_getState =
       _RPlayer_getState_ptr.asFunction<_dart_RPlayer_getState>();
 
+  ffi.Pointer<ffi.Int8> RPlayer_getMessage(
+    ffi.Pointer<ffi.Void> arg0,
+  ) {
+    return _RPlayer_getMessage(
+      arg0,
+    );
+  }
+
+  late final _RPlayer_getMessage_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_getMessage>>('RPlayer_getMessage');
+  late final _dart_RPlayer_getMessage _RPlayer_getMessage =
+      _RPlayer_getMessage_ptr.asFunction<_dart_RPlayer_getMessage>();
+
   int RPlayer_getTextureId(
     ffi.Pointer<ffi.Void> arg0,
   ) {
@@ -206,6 +219,14 @@ typedef _c_RPlayer_getState = ffi.Int32 Function(
 );
 
 typedef _dart_RPlayer_getState = int Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_getMessage = ffi.Pointer<ffi.Int8> Function(
+  ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _dart_RPlayer_getMessage = ffi.Pointer<ffi.Int8> Function(
   ffi.Pointer<ffi.Void> arg0,
 );
 

@@ -2,7 +2,7 @@
 
 #include <jni.h>
 
-#include "log.h"
+#include "util/log.h"
 
 #define FFI_ENV_ATTACH(VALUE_ON_FAILURE) \
   JNIEnv* env = FFIAndroid::attach();    \

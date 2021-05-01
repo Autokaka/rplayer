@@ -8,7 +8,7 @@ void FFIAndroid::FFIRegister(JavaVM* pJvm) {
 
 JNIEnv* FFIAndroid::attach() {
   if (_pJvm == nullptr) {
-    LOGE("Failed to attach to current JNIEnv: JVM not initialized.");
+    LOG::E("Failed to attach to current JNIEnv: JVM not initialized.");
     return nullptr;
   }
 
@@ -17,7 +17,7 @@ JNIEnv* FFIAndroid::attach() {
   if (state == JNI_EDETACHED || env == nullptr) {
     state = _pJvm->AttachCurrentThread(&env, nullptr);
     if (state < 0) {
-      LOGE("Failed to attach to current JNIEnv: code %d.", state);
+      LOG::E("Failed to attach to current JNIEnv: code %d.", state);
       return nullptr;
     }
   }
@@ -27,7 +27,7 @@ JNIEnv* FFIAndroid::attach() {
 
 int FFIAndroid::detach() {
   if (jint state = _pJvm->DetachCurrentThread() != 0) {
-    LOGE("Failed to detach to current JNIEnv: code %d.", state);
+    LOG::E("Failed to detach to current JNIEnv: code %d.", state);
     return static_cast<int>(state);
   }
   return 0;

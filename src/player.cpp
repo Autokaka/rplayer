@@ -26,7 +26,7 @@ int RPlayer::dispose() {
     setError("Failed to detach decode thread: code %d.", threadReturn);
   }
 
-  LOGD("Decode thread finished. PID: %ld", _pid);
+  LOG::D("Decode thread finished. PID: %ld", _pid);
 
   if (pTextureAndroid != nullptr && pTextureAndroid->release() != 0) {
     setError(
@@ -82,7 +82,8 @@ int RPlayer::getWidth() {
 
 void RPlayer::setBuffering() {
   if (state == RPlayerState::STOPPED || state == RPlayerState::ERROR) {
-    LOGE("Failed to set player state to BUFFERING: player in state %d", state);
+    LOG::E("Failed to set player state to BUFFERING: player in state %d",
+           state);
     return;
   }
   state = RPlayerState::BUFFERING;
@@ -90,7 +91,7 @@ void RPlayer::setBuffering() {
 
 void RPlayer::setPlaying() {
   if (state != RPlayerState::PAUSED && state != RPlayerState::BUFFERING) {
-    LOGE("Failed to set player state to PLAYING: player in state %d", state);
+    LOG::E("Failed to set player state to PLAYING: player in state %d", state);
     return;
   }
   state = RPlayerState::PLAYING;
@@ -98,7 +99,7 @@ void RPlayer::setPlaying() {
 
 void RPlayer::setPaused() {
   if (state != RPlayerState::PLAYING && state != RPlayerState::BUFFERING) {
-    LOGE("Failed to set player state to PAUSED: player in state %d", state);
+    LOG::E("Failed to set player state to PAUSED: player in state %d", state);
     return;
   }
   state = RPlayerState::PAUSED;
@@ -110,12 +111,13 @@ void RPlayer::setStopped() {
 
 void RPlayer::setError(const char* fmt, ...) {
   if (state == RPlayerState::STOPPED) {
-    LOGE("Failed to set player state to ERROR: player in state %d", state);
+    LOG::E("Failed to set player state to ERROR: player in state %d", state);
     return;
   }
   state = RPlayerState::ERROR;
   va_list args;
   va_start(args, fmt);
-  LOGE(fmt, args);
+  __android_log_vprint(ANDROID_LOG_ERROR, LOG::TAG, fmt, args);
+  vsprintf(msg, fmt, args);
   va_end(args);
 }
