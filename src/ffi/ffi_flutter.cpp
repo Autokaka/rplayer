@@ -49,6 +49,6 @@ DART_EXPORT long RPlayer_getTextureId(void* p) {
   if (pPlayer->pTextureAndroid == nullptr) {
     return -1;
   }
-  return static_cast<long>(pPlayer->pTextureAndroid->getId());
+  return static_cast<long>(pPlayer->pTextureAndroid->id);
 }
 }

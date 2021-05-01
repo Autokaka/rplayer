@@ -14,7 +14,7 @@ class _VideoTestPageState extends State<VideoTestPage> {
   void initState() {
     super.initState();
     player.startPlayWhenReady("rtsp://admin:admin@192.168.1.103:8554/live");
-    player2.startPlayWhenReady("rtsp://admin:admin@192.168.100.206:8554/live");
+    player2.startPlayWhenReady("rtsp://admin:admin@192.168.1.102:8554/live");
   }
 
   @override
@@ -29,19 +29,12 @@ class _VideoTestPageState extends State<VideoTestPage> {
             player: player,
             width: MediaQuery.of(context).size.width,
             height: 300,
-            // child: Center(
-            //   child: Container(
-            //     height: 30,
-            //     width: 30,
-            //     color: Colors.white,
-            //   ),
-            // ),
           ),
-          // RPlayerView(
-          //   player: player2,
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 300,
-          // ),
+          RPlayerView(
+            player: player2,
+            width: MediaQuery.of(context).size.width,
+            height: 300,
+          ),
         ],
       ),
     );

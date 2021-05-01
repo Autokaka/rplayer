@@ -8,14 +8,16 @@
 
 class TextureAndroid {
  private:
-  static jclass _clazz;
+  static jclass _TextureAndroidClass;
+  jobject _textureAndroid;
 
  public:
-  jobject thisObj;
+  long id = -1;
   ANativeWindow* nativeWindow;
 
  public:
   static void FFIRegister(JNIEnv*);
-  TextureAndroid(JNIEnv*, jobject);
-  jlong getId();
+  static void FFIUnregister(JNIEnv*);
+  TextureAndroid();
+  int release();
 };
