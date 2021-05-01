@@ -118,5 +118,6 @@ void RPlayer::setError(const char* fmt, ...) {
   va_list args;
   va_start(args, fmt);
   __android_log_vprint(ANDROID_LOG_ERROR, LOG::TAG, fmt, args);
+  vsprintf(msg, fmt, args);
   va_end(args);
 }

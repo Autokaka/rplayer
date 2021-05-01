@@ -21,5 +21,7 @@ DART_EXPORT int RPlayer_getWidth(void*);
 
 DART_EXPORT int RPlayer_getState(void*);
 
+DART_EXPORT char* RPlayer_getMessage(void*p);
+
 DART_EXPORT long RPlayer_getTextureId(void*);
 }

@@ -22,6 +22,7 @@ class RPlayerState {
 class RPlayer {
  public:
   char* url;
+  char msg[1024];
   int state = RPlayerState::INIT;
   TextureAndroid* pTextureAndroid;
   RPlayerDecoder* decoder;

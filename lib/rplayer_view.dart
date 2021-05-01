@@ -4,15 +4,17 @@ class RPlayerView extends StatefulWidget {
   final RPlayer player;
   final double height;
   final double width;
-  final Widget placeholder;
+  final Widget? placeholder;
   final Widget child;
+  final Widget? error;
 
   RPlayerView({
     required this.player,
     this.height = 0,
     this.width = 0,
-    this.placeholder = const SizedBox(),
+    this.placeholder,
     this.child = const SizedBox(),
+    this.error,
   });
 
   @override
@@ -27,6 +29,9 @@ class _RPlayerViewState extends State<RPlayerView> {
       setState(() {
         textureId = widget.player.textureId;
       });
+    }
+    if (widget.player.state == RPlayerState.ERROR) {
+      setState(() {});
     }
   }
 
@@ -47,12 +52,25 @@ class _RPlayerViewState extends State<RPlayerView> {
         child: Stack(
           children: [
             Center(
-              child: (widget.player.textureId < 0)
-                  ? widget.placeholder
-                  : AspectRatio(
+              child: (widget.player.textureId >= 0)
+                  ? AspectRatio(
                       aspectRatio: widget.player.size.aspectRatio,
                       child: Texture(textureId: textureId),
-                    ),
+                    )
+                  : (widget.player.state == RPlayerState.ERROR)
+                  ? widget.error ??
+                      Center(
+                        child: Text(
+                          "Error: ${widget.player.message}",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                  : widget.placeholder ??
+                      SizedBox(
+                        height: 40,
+                        width: 40,
+                        child: CircularProgressIndicator(),
+                      ),
             ),
             widget.child,
           ],
