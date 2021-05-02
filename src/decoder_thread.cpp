@@ -1,8 +1,7 @@
-#include "decoder_c.h"
+#include "decoder_thread.h"
 
 void* _decode(void* args) {
   RPlayer* pPlayer = static_cast<RPlayer*>(args);
-  pPlayer->decoder = new RPlayerDecoder();
   pPlayer->setBuffering();
 
   /**
@@ -11,6 +10,9 @@ void* _decode(void* args) {
   pPlayer->decoder->formatContext = avformat_alloc_context();
   if (int openResult = avformat_open_input(&(pPlayer->decoder->formatContext),
                                            pPlayer->url, NULL, NULL) < 0) {
+    if (pPlayer->config->_consumer->retryTimesOnDisconnect > 0) {
+      return _retryDecode(static_cast<void*>(pPlayer));
+    }
     pPlayer->setError("Failed on avformat_open_input: %s",
                       av_err2str(openResult));
     return nullptr;
@@ -121,10 +123,16 @@ void* _decode(void* args) {
   pPlayer->setPlaying();
   pPlayer->decoder->frame = av_frame_alloc();
   pPlayer->decoder->packet = av_packet_alloc();
-  while (pPlayer->state != RPlayerState::STOPPED &&
-         pPlayer->state != RPlayerState::ERROR &&
-         av_read_frame(pPlayer->decoder->formatContext,
+  pPlayer->config->resetConsumer();
+  while (av_read_frame(pPlayer->decoder->formatContext,
                        pPlayer->decoder->packet) == 0) {
+    if (pPlayer->state == RPlayerState::STOPPED ||
+        pPlayer->state == RPlayerState::ERROR) {
+      LOG::D("Decoder thread will be terminated: RPlayerState %d",
+             pPlayer->state);
+      av_packet_unref(pPlayer->decoder->packet);
+      return nullptr;
+    }
     if (pPlayer->decoder->packet->stream_index != videoStreamIndex ||
         pPlayer->state == RPlayerState::PAUSED) {
       av_packet_unref(pPlayer->decoder->packet);
@@ -181,5 +189,34 @@ void* _decode(void* args) {
     av_packet_unref(pPlayer->decoder->packet);
   }
 
+  /**
+   * If loop is broken without STOPPED or ERROR flag,
+   * we need to consider relinking to previous stream.
+   */
+  _retryDecode(static_cast<void*>(pPlayer));
+
   return nullptr;
+}
+
+void* _retryDecode(void* args) {
+  RPlayer* pPlayer = static_cast<RPlayer*>(args);
+
+  if (pPlayer->state == RPlayerState::STOPPED ||
+      pPlayer->state == RPlayerState::ERROR ||
+      pPlayer->config->_consumer->retryTimesOnDisconnect <= 0) {
+    return nullptr;
+  }
+
+  usleep(pPlayer->config->retryDelayInMilliseconds * 1000);
+  pPlayer->config->_consumer->retryTimesOnDisconnect--;
+  sprintf(pPlayer->msg,
+          "Decode thread %ld: lost connection. Retrying... (%d/%d)",
+          pPlayer->pid,
+          pPlayer->config->retryTimesOnDisconnect -
+              pPlayer->config->_consumer->retryTimesOnDisconnect,
+          pPlayer->config->retryTimesOnDisconnect);
+  LOG::D(pPlayer->msg);
+  pPlayer->decoder->release();
+  pPlayer->decoder = new RPlayerDecoder();
+  return _decode(static_cast<void*>(pPlayer));
 }

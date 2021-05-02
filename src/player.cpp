@@ -7,26 +7,26 @@ RPlayer* RPlayer::createInstance() {
 }
 
 int RPlayer::createDecodeThread(char* urlIn) {
-  if (_pid != 0) {
+  if (pid != 0) {
     dispose();
     state = RPlayerState::INIT;
   }
 
   url = urlIn;
-  return pthread_create(&_pid, nullptr, _decode, static_cast<void*>(this));
+  return pthread_create(&pid, nullptr, _decode, static_cast<void*>(this));
 }
 
 int RPlayer::dispose() {
   setStopped();
-  if (_pid == 0) {
+  if (pid == 0) {
     return 0;
   }
 
-  if (int threadReturn = pthread_join(_pid, nullptr) != 0) {
+  if (int threadReturn = pthread_join(pid, nullptr) != 0) {
     setError("Failed to detach decode thread: code %d.", threadReturn);
   }
 
-  LOG::D("Decode thread finished. PID: %ld", _pid);
+  LOG::D("Decode thread finished. PID: %ld", pid);
 
   if (pTextureAndroid != nullptr && pTextureAndroid->release() != 0) {
     setError(
@@ -34,34 +34,11 @@ int RPlayer::dispose() {
         "error when you create a decode thread from RPlayer next time.");
   }
 
-  if (decoder == nullptr) {
-    return 0;
-  }
+  decoder->release();
+  decoder = nullptr;
 
-  if (decoder->swsContext != nullptr) {
-    sws_freeContext(decoder->swsContext);
-  }
-
-  if (decoder->outFrame != nullptr) {
-    av_frame_free(&(decoder->outFrame));
-  }
-
-  if (decoder->frame != nullptr) {
-    av_frame_free(&(decoder->frame));
-  }
-
-  if (decoder->packet != nullptr) {
-    av_packet_free(&(decoder->packet));
-  }
-
-  if (decoder->codecContext != nullptr) {
-    avcodec_free_context(&(decoder->codecContext));
-  }
-
-  if (decoder->formatContext != nullptr) {
-    avformat_close_input(&(decoder->formatContext));
-    avformat_free_context(decoder->formatContext);
-  }
+  config->release();
+  config = nullptr;
 
   return 0;
 }

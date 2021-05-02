@@ -2,8 +2,9 @@
 
 #include <pthread.h>
 #include <memory>
+#include "config.h"
 #include "decoder.h"
-#include "decoder_c.h"
+#include "decoder_thread.h"
 #include "texture/texture_android.h"
 #include "util/log.h"
 
@@ -25,10 +26,9 @@ class RPlayer {
   char msg[1024];
   int state = RPlayerState::INIT;
   TextureAndroid* pTextureAndroid;
-  RPlayerDecoder* decoder;
-
- private:
-  pthread_t _pid;
+  RPlayerDecoder* decoder = new RPlayerDecoder();
+  RPlayerConfig* config = RPlayerConfig::createInstance();
+  pthread_t pid;
 
  public:
   static RPlayer* createInstance();
@@ -41,6 +41,6 @@ class RPlayer {
   void setBuffering();
   void setPlaying();
   void setPaused();
-  void setError(const char*, ...);
   void setStopped();
+  void setError(const char*, ...);
 };

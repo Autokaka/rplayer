@@ -79,6 +79,21 @@ class NativeLibrary {
   late final _dart_RPlayer_setPaused _RPlayer_setPaused =
       _RPlayer_setPaused_ptr.asFunction<_dart_RPlayer_setPaused>();
 
+  void RPlayer_setConfig(
+    ffi.Pointer<ffi.Void> arg0,
+    ffi.Pointer<ffi.Void> arg1,
+  ) {
+    return _RPlayer_setConfig(
+      arg0,
+      arg1,
+    );
+  }
+
+  late final _RPlayer_setConfig_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayer_setConfig>>('RPlayer_setConfig');
+  late final _dart_RPlayer_setConfig _RPlayer_setConfig =
+      _RPlayer_setConfig_ptr.asFunction<_dart_RPlayer_setConfig>();
+
   /// Release all resources used in decode thread.
   int RPlayer_dispose(
     ffi.Pointer<ffi.Void> arg0,
@@ -158,6 +173,55 @@ class NativeLibrary {
           'RPlayer_getTextureId');
   late final _dart_RPlayer_getTextureId _RPlayer_getTextureId =
       _RPlayer_getTextureId_ptr.asFunction<_dart_RPlayer_getTextureId>();
+
+  /// See [src/config.h] for the definitions
+  /// of RPlayerConfig.
+  ffi.Pointer<ffi.Void> RPlayerConfig_createInstance() {
+    return _RPlayerConfig_createInstance();
+  }
+
+  late final _RPlayerConfig_createInstance_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayerConfig_createInstance>>(
+          'RPlayerConfig_createInstance');
+  late final _dart_RPlayerConfig_createInstance _RPlayerConfig_createInstance =
+      _RPlayerConfig_createInstance_ptr.asFunction<
+          _dart_RPlayerConfig_createInstance>();
+
+  void RPlayerConfig_setRetryTimesOnDisconnect(
+    ffi.Pointer<ffi.Void> arg0,
+    int arg1,
+  ) {
+    return _RPlayerConfig_setRetryTimesOnDisconnect(
+      arg0,
+      arg1,
+    );
+  }
+
+  late final _RPlayerConfig_setRetryTimesOnDisconnect_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayerConfig_setRetryTimesOnDisconnect>>(
+          'RPlayerConfig_setRetryTimesOnDisconnect');
+  late final _dart_RPlayerConfig_setRetryTimesOnDisconnect
+      _RPlayerConfig_setRetryTimesOnDisconnect =
+      _RPlayerConfig_setRetryTimesOnDisconnect_ptr.asFunction<
+          _dart_RPlayerConfig_setRetryTimesOnDisconnect>();
+
+  void RPlayerConfig_setRetryDelayInMilliseconds(
+    ffi.Pointer<ffi.Void> arg0,
+    int arg1,
+  ) {
+    return _RPlayerConfig_setRetryDelayInMilliseconds(
+      arg0,
+      arg1,
+    );
+  }
+
+  late final _RPlayerConfig_setRetryDelayInMilliseconds_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayerConfig_setRetryDelayInMilliseconds>>(
+          'RPlayerConfig_setRetryDelayInMilliseconds');
+  late final _dart_RPlayerConfig_setRetryDelayInMilliseconds
+      _RPlayerConfig_setRetryDelayInMilliseconds =
+      _RPlayerConfig_setRetryDelayInMilliseconds_ptr.asFunction<
+          _dart_RPlayerConfig_setRetryDelayInMilliseconds>();
 }
 
 typedef _c_RPlayer_createInstance = ffi.Pointer<ffi.Void> Function();
@@ -188,6 +252,16 @@ typedef _c_RPlayer_setPaused = ffi.Void Function(
 
 typedef _dart_RPlayer_setPaused = void Function(
   ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayer_setConfig = ffi.Void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Pointer<ffi.Void> arg1,
+);
+
+typedef _dart_RPlayer_setConfig = void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Pointer<ffi.Void> arg1,
 );
 
 typedef _c_RPlayer_dispose = ffi.Int32 Function(
@@ -236,4 +310,28 @@ typedef _c_RPlayer_getTextureId = ffi.Int64 Function(
 
 typedef _dart_RPlayer_getTextureId = int Function(
   ffi.Pointer<ffi.Void> arg0,
+);
+
+typedef _c_RPlayerConfig_createInstance = ffi.Pointer<ffi.Void> Function();
+
+typedef _dart_RPlayerConfig_createInstance = ffi.Pointer<ffi.Void> Function();
+
+typedef _c_RPlayerConfig_setRetryTimesOnDisconnect = ffi.Void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Int32 arg1,
+);
+
+typedef _dart_RPlayerConfig_setRetryTimesOnDisconnect = void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  int arg1,
+);
+
+typedef _c_RPlayerConfig_setRetryDelayInMilliseconds = ffi.Void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Int32 arg1,
+);
+
+typedef _dart_RPlayerConfig_setRetryDelayInMilliseconds = void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  int arg1,
 );

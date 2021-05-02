@@ -7,8 +7,16 @@ class VideoTestPage extends StatefulWidget {
 }
 
 class _VideoTestPageState extends State<VideoTestPage> {
-  final player = RPlayer();
-  final player2 = RPlayer();
+  final player = RPlayer(
+    config: RPlayerConfig()
+      ..retryTimesOnDisconnect = 10
+      ..retryDelayInMilliseconds = 2000,
+  );
+  final player2 = RPlayer(
+    config: RPlayerConfig()
+      ..retryTimesOnDisconnect = 10
+      ..retryDelayInMilliseconds = 2000,
+  );
 
   @override
   void initState() {
