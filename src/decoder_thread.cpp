@@ -2,7 +2,6 @@
 
 void* _decode(void* args) {
   RPlayer* pPlayer = static_cast<RPlayer*>(args);
-  pPlayer->decoder = new RPlayerDecoder();
   pPlayer->setBuffering();
 
   /**
@@ -11,8 +10,7 @@ void* _decode(void* args) {
   pPlayer->decoder->formatContext = avformat_alloc_context();
   if (int openResult = avformat_open_input(&(pPlayer->decoder->formatContext),
                                            pPlayer->url, NULL, NULL) < 0) {
-    if (pPlayer->config != nullptr &&
-        pPlayer->config->retryTimesOnDisconnect > 0) {
+    if (pPlayer->config->_consumer->retryTimesOnDisconnect > 0) {
       return _retryDecode(static_cast<void*>(pPlayer));
     }
     pPlayer->setError("Failed on avformat_open_input: %s",
@@ -125,6 +123,7 @@ void* _decode(void* args) {
   pPlayer->setPlaying();
   pPlayer->decoder->frame = av_frame_alloc();
   pPlayer->decoder->packet = av_packet_alloc();
+  pPlayer->config->resetConsumer();
   while (av_read_frame(pPlayer->decoder->formatContext,
                        pPlayer->decoder->packet) == 0) {
     if (pPlayer->state == RPlayerState::STOPPED ||
@@ -203,18 +202,21 @@ void* _retryDecode(void* args) {
   RPlayer* pPlayer = static_cast<RPlayer*>(args);
 
   if (pPlayer->state == RPlayerState::STOPPED ||
-      pPlayer->state == RPlayerState::ERROR || pPlayer->config == nullptr ||
-      pPlayer->config->retryTimesOnDisconnect <= 0) {
+      pPlayer->state == RPlayerState::ERROR ||
+      pPlayer->config->_consumer->retryTimesOnDisconnect <= 0) {
     return nullptr;
   }
 
-  // FIXME: [luao] retryTimesOnDisconnect won't be reset to previous value when
-  // stream is shutdown multiple times in one play.
   usleep(pPlayer->config->retryDelayInMilliseconds * 1000);
-  pPlayer->config->retryTimesOnDisconnect--;
-  sprintf(pPlayer->msg, "Lost connection. Retrying... (%d times left)",
+  pPlayer->config->_consumer->retryTimesOnDisconnect--;
+  sprintf(pPlayer->msg,
+          "Decode thread %ld: lost connection. Retrying... (%d/%d)",
+          pPlayer->pid,
+          pPlayer->config->retryTimesOnDisconnect -
+              pPlayer->config->_consumer->retryTimesOnDisconnect,
           pPlayer->config->retryTimesOnDisconnect);
   LOG::D(pPlayer->msg);
   pPlayer->decoder->release();
+  pPlayer->decoder = new RPlayerDecoder();
   return _decode(static_cast<void*>(pPlayer));
 }

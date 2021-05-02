@@ -4,5 +4,4 @@
 #include "player.h"
 
 void* _decode(void*);
-
 void* _retryDecode(void*);

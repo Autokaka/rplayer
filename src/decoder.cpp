@@ -25,4 +25,6 @@ void RPlayerDecoder::release() {
     avformat_close_input(&formatContext);
     avformat_free_context(formatContext);
   }
+
+  delete this;
 }

@@ -26,11 +26,9 @@ class RPlayer {
   char msg[1024];
   int state = RPlayerState::INIT;
   TextureAndroid* pTextureAndroid;
-  RPlayerDecoder* decoder;
-  RPlayerConfig* config;
-
- private:
-  pthread_t _pid;
+  RPlayerDecoder* decoder = new RPlayerDecoder();
+  RPlayerConfig* config = RPlayerConfig::createInstance();
+  pthread_t pid;
 
  public:
   static RPlayer* createInstance();

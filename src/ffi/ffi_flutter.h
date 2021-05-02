@@ -1,7 +1,7 @@
 #pragma once
 
-#include "player.h"
 #include "config.h"
+#include "player.h"
 
 #define DART_EXPORT __attribute__((visibility("default"))) __attribute__((used))
 
@@ -28,7 +28,7 @@ DART_EXPORT int RPlayer_getWidth(void*);
 
 DART_EXPORT int RPlayer_getState(void*);
 
-DART_EXPORT char* RPlayer_getMessage(void*p);
+DART_EXPORT char* RPlayer_getMessage(void*);
 
 DART_EXPORT long RPlayer_getTextureId(void*);
 
