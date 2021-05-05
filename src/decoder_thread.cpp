@@ -5,11 +5,17 @@ void* _decode(void* args) {
   pPlayer->setBuffering();
 
   /**
+   * Init avformat and start the network components.
+   */
+  av_register_all();
+  avformat_network_init();
+
+  /**
    * Create format context and open video stream.
    */
   pPlayer->decoder->formatContext = avformat_alloc_context();
   if (int openResult = avformat_open_input(&(pPlayer->decoder->formatContext),
-                                           pPlayer->url, NULL, NULL) < 0) {
+                                           pPlayer->url, nullptr, nullptr) < 0) {
     if (pPlayer->config->_consumer->retryTimesOnDisconnect > 0) {
       return _retryDecode(static_cast<void*>(pPlayer));
     }

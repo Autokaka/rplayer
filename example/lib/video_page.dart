@@ -31,7 +31,8 @@ class _VideoTestPageState extends State<VideoTestPage> {
       appBar: AppBar(
         title: const Text('RPlayer Video Test Page'),
       ),
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
         children: [
           RPlayerView(
             player: player,
