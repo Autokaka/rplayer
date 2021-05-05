@@ -68,7 +68,9 @@ class _RPlayerViewState extends State<RPlayerView> {
                     SizedBox(
                       height: 40,
                       width: 40,
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
                     ),
           ),
           widget.child,
