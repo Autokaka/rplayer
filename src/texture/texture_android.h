@@ -12,7 +12,7 @@ class TextureAndroid {
   jobject _textureAndroid;
 
  public:
-  long id = -1;
+  long long id = -1;
   ANativeWindow* nativeWindow;
 
  public:

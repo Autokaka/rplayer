@@ -30,7 +30,7 @@ DART_EXPORT int RPlayer_getState(void*);
 
 DART_EXPORT char* RPlayer_getMessage(void*);
 
-DART_EXPORT long RPlayer_getTextureId(void*);
+DART_EXPORT long long RPlayer_getTextureId(void*);
 
 //////////////////////////////////////////
 // RPlayerConfig

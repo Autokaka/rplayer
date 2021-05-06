@@ -28,7 +28,7 @@ TextureAndroid::TextureAndroid() {
     ;
 
   jfieldID idField = env->GetFieldID(_TextureAndroidClass, "id", "J");
-  id = static_cast<long>(env->GetLongField(_textureAndroid, idField));
+  id = static_cast<long long>(env->GetLongField(_textureAndroid, idField));
 
   nativeWindow = ANativeWindow_fromSurface(env, surface);
 
