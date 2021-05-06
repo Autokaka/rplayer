@@ -1,4 +1,7 @@
 /*
+ * Filter graphs
+ * copyright (c) 2007 Bobby Bingham
+ *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -16,22 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef AVCODEC_ADTS_PARSER_H
-#define AVCODEC_ADTS_PARSER_H
+#ifndef AVFILTER_AVFILTERGRAPH_H
+#define AVFILTER_AVFILTERGRAPH_H
 
-#include <stddef.h>
-#include <stdint.h>
+#include "avfilter.h"
+#include "libavutil/log.h"
 
-#define AV_AAC_ADTS_HEADER_SIZE 7
-
-/**
- * Extract the number of samples and frames from AAC data.
- * @param[in]  buf     pointer to AAC data buffer
- * @param[out] samples Pointer to where number of samples is written
- * @param[out] frames  Pointer to where number of frames is written
- * @return Returns 0 on success, error code on failure.
- */
-int av_adts_header_parse(const uint8_t *buf, uint32_t *samples,
-                         uint8_t *frames);
-
-#endif /* AVCODEC_ADTS_PARSER_H */
+#endif /* AVFILTER_AVFILTERGRAPH_H */

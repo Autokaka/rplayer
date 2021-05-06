@@ -17,7 +17,7 @@ class EntryPage extends StatelessWidget {
               ),
             );
           },
-          child: Text("Launch Video Test Page."),
+          child: Text('Launch Video Test Page.'),
         ),
       ),
     );

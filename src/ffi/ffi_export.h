@@ -42,7 +42,7 @@ int RPlayer_getState(void*);
 
 char* RPlayer_getMessage(void*);
 
-long RPlayer_getTextureId(void*);
+long long RPlayer_getTextureId(void*);
 
 //////////////////////////////////////////
 // RPlayerConfig

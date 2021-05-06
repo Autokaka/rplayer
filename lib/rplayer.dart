@@ -12,7 +12,7 @@ part 'rplayer_config.dart';
 part 'rplayer_state.dart';
 part 'rplayer_view.dart';
 
-final _lib = NativeLibrary(DynamicLibrary.open("librplayer.so"));
+final _lib = NativeLibrary(DynamicLibrary.open('librplayer.so'));
 
 class RPlayer with ChangeNotifier {
   final Pointer<Void> _pNativePlayer;

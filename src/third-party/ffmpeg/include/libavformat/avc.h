@@ -1,7 +1,6 @@
 /*
- * AC-3 parser prototypes
- * Copyright (c) 2003 Fabrice Bellard
- * Copyright (c) 2003 Michael Niedermayer
+ * AVC helper functions for muxers
+ * Copyright (c) 2008 Aurelien Jacobs <aurel@gnuage.org>
  *
  * This file is part of FFmpeg.
  *
@@ -20,17 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef AVCODEC_AC3_PARSER_H
-#define AVCODEC_AC3_PARSER_H
+#ifndef AVFORMAT_AVC_H
+#define AVFORMAT_AVC_H
 
-#include <stddef.h>
 #include <stdint.h>
+#include "avio.h"
 
-/**
- * Extract the bitstream ID and the frame size from AC-3 data.
- */
-int av_ac3_parse_header(const uint8_t *buf, size_t size,
-                        uint8_t *bitstream_id, uint16_t *frame_size);
+int ff_avc_parse_nal_units(AVIOContext *s, const uint8_t *buf, int size);
+int ff_avc_parse_nal_units_buf(const uint8_t *buf_in, uint8_t **buf, int *size);
+int ff_isom_write_avcc(AVIOContext *pb, const uint8_t *data, int len);
+const uint8_t *ff_avc_find_startcode(const uint8_t *p, const uint8_t *end);
+int ff_avc_write_annexb_extradata(const uint8_t *in, uint8_t **buf, int *size);
+const uint8_t *ff_avc_mp4_find_startcode(const uint8_t *start,
+                                         const uint8_t *end,
+                                         int nal_length_size);
 
-
-#endif /* AVCODEC_AC3_PARSER_H */
+#endif /* AVFORMAT_AVC_H */

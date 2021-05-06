@@ -1,4 +1,6 @@
 /*
+ * copyright (c) 2017 Raymond Zheng
+ *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -16,21 +18,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#ifndef AVUTIL_HWCONTEXT_MEDIACODEC_H
-#define AVUTIL_HWCONTEXT_MEDIACODEC_H
+#ifndef AVUTIL_DNS_CACHE_H
+#define AVUTIL_DNS_CACHE_H
 
-/**
- * MediaCodec details.
- *
- * Allocated as AVHWDeviceContext.hwctx
- */
-typedef struct AVMediaCodecDeviceContext {
-    /**
-     * android/view/Surface handle, to be filled by the user.
-     *
-     * This is the default surface used by decoders on this device.
-     */
-    void *surface;
-} AVMediaCodecDeviceContext;
+#include "libavutil/log.h"
 
-#endif /* AVUTIL_HWCONTEXT_MEDIACODEC_H */
+typedef struct DnsCacheEntry {
+    volatile int ref_count;
+    volatile int delete_flag;
+    int64_t expired_time;
+    struct addrinfo *res;  // construct by private function, not support ai_next and ai_canonname, can only be released using free_private_addrinfo
+} DnsCacheEntry;
+
+DnsCacheEntry *get_dns_cache_reference(char *hostname);
+int release_dns_cache_reference(char *hostname, DnsCacheEntry **p_entry);
+int remove_dns_cache_entry(char *hostname);
+int add_dns_cache_entry(char *hostname, struct addrinfo *cur_ai, int64_t timeout);
+
+#endif /* AVUTIL_DNS_CACHE_H */
