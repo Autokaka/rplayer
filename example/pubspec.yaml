@@ -9,6 +9,8 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  android_dpad_detector:
+    git: https://github.com/Autokaka/android_dpad_detector.git
   flutter:
     sdk: flutter
 

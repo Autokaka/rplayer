@@ -9,6 +9,16 @@ void* _decode(void* args) {
    */
   av_register_all();
   avformat_network_init();
+  AVDictionary* options = nullptr;
+  av_dict_set(&options, "buffer_size", "1024000", 0);
+  av_dict_set(&options, "fflags", "nobuffer", 0);
+  av_dict_set(&options, "fflags", "discardcorrupt", 0);
+  av_dict_set(&options, "probesize", "32", 0);
+  av_dict_set(&options, "analyzeduration", "0", 0);
+  av_dict_set(&options, "packet-buffering", "0", 0);
+  av_dict_set(&options, "fps", "30", 0);
+  av_dict_set(&options, "preset", "ultrafast", 0);
+  av_dict_set(&options, "tune", "zerolatency", 0);
 
   /**
    * Create format context and open video stream.
@@ -102,7 +112,7 @@ void* _decode(void* args) {
                      pPlayer->decoder->codecContext->pix_fmt,
                      pPlayer->decoder->codecContext->width,
                      pPlayer->decoder->codecContext->height, AV_PIX_FMT_RGBA,
-                     SWS_BICUBIC, NULL, NULL, NULL);
+                     SWS_BICUBIC, nullptr, nullptr, nullptr);
   if (pPlayer->decoder->swsContext == nullptr) {
     pPlayer->setError("Failed to create picture context.");
     return nullptr;

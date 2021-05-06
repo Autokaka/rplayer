@@ -1,3 +1,4 @@
+import 'package:android_dpad_detector/dpad_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:rplayer_example/video_page.dart';
 
@@ -9,15 +10,18 @@ class EntryPage extends StatelessWidget {
         title: const Text('RPlayer example app'),
       ),
       body: Center(
-        child: TextButton(
-          onPressed: () {
+        child: DPadDetector(
+          onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => VideoTestPage(),
               ),
             );
           },
-          child: Text('Launch Video Test Page.'),
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Text('Launch Video Test Page.'),
+          ),
         ),
       ),
     );
