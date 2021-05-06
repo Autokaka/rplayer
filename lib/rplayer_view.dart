@@ -60,7 +60,7 @@ class _RPlayerViewState extends State<RPlayerView> {
                 ? widget.error ??
                     Center(
                       child: Text(
-                        "Error: ${widget.player.message}",
+                        'Error: ${widget.player.message}',
                         style: TextStyle(color: Colors.white),
                       ),
                     )

@@ -21,8 +21,8 @@ class _VideoTestPageState extends State<VideoTestPage> {
   @override
   void initState() {
     super.initState();
-    player.startPlayWhenReady("rtsp://admin:admin@192.168.1.103:8554/live");
-    player2.startPlayWhenReady("rtsp://admin:admin@192.168.1.102:8554/live");
+    player.startPlayWhenReady('rtsp://admin:admin@192.168.1.103:8554/live');
+    player2.startPlayWhenReady('rtsp://admin:admin@192.168.1.102:8554/live');
   }
 
   @override

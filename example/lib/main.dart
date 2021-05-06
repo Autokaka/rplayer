@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rplayer_example/entry_page.dart';
-import 'package:rplayer_example/video_page.dart';
 
 void main() {
   runApp(MyApp());
