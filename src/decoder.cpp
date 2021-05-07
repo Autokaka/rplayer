@@ -26,5 +26,7 @@ void RPlayerDecoder::release() {
     avformat_free_context(formatContext);
   }
 
+  avformat_network_deinit();
+
   delete this;
 }

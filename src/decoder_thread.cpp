@@ -9,23 +9,21 @@ void* _decode(void* args) {
    */
   av_register_all();
   avformat_network_init();
-  AVDictionary* options = nullptr;
-  av_dict_set(&options, "buffer_size", "1024000", 0);
-  av_dict_set(&options, "fflags", "nobuffer", 0);
-  av_dict_set(&options, "fflags", "discardcorrupt", 0);
-  av_dict_set(&options, "probesize", "32", 0);
-  av_dict_set(&options, "analyzeduration", "0", 0);
-  av_dict_set(&options, "packet-buffering", "0", 0);
-  av_dict_set(&options, "fps", "30", 0);
-  av_dict_set(&options, "preset", "ultrafast", 0);
-  av_dict_set(&options, "tune", "zerolatency", 0);
 
   /**
    * Create format context and open video stream.
    */
+  AVDictionary* options = nullptr;
+  av_dict_set(&options, "fflags", "nobuffer", 0);
+  av_dict_set(&options, "rtsp_transport", "tcp", 0);
+  av_dict_set(&options, "stimeout", "20000000", 0);  // tcp
+  av_dict_set(&options, "buffer_size", "1024000", 0);
+  //  av_dict_set(&options, "rtsp_transport", "udp", 0);
+  //  av_dict_set(&options, "timeout", "20000000", 0); // udp
   pPlayer->decoder->formatContext = avformat_alloc_context();
-  if (int openResult = avformat_open_input(&(pPlayer->decoder->formatContext),
-                                           pPlayer->url, nullptr, nullptr) < 0) {
+  if (int openResult =
+          avformat_open_input(&(pPlayer->decoder->formatContext), pPlayer->url,
+                              nullptr, &options) < 0) {
     if (pPlayer->config->_consumer->retryTimesOnDisconnect > 0) {
       return _retryDecode(static_cast<void*>(pPlayer));
     }
@@ -45,7 +43,12 @@ void* _decode(void* args) {
    * Now we need to find the video stream in order to draw pictures
    * on the screen.
    */
-  if (avformat_find_stream_info(pPlayer->decoder->formatContext, NULL) < 0) {
+  av_dict_set(&options, "probesize", "32", 0);
+  av_dict_set(&options, "analyzeduration", "0", 0);
+  av_dict_set(&options, "fflags", "discardcorrupt", 0);
+  av_dict_set(&options, "flush_packets", "1", 0);
+  av_dict_set(&options, "avioflags", "direct", 0);
+  if (avformat_find_stream_info(pPlayer->decoder->formatContext, nullptr) < 0) {
     pPlayer->setError("Failed to read video info from stream.");
     return nullptr;
   }
@@ -85,8 +88,12 @@ void* _decode(void* args) {
     pPlayer->setError("Failed to inject params to decoder context.");
     return nullptr;
   }
+  av_dict_set(&options, "flags", "low_delay", 0);
+  av_dict_set(&options, "preset", "ultrafast", 0);
+  av_dict_set(&options, "tune", "zerolatency", 0);
   if (avcodec_open2(pPlayer->decoder->codecContext, codec, nullptr) < 0) {
     pPlayer->setError("Failed to open decoder from context.");
+    return nullptr;
   }
 
   /**
@@ -105,6 +112,7 @@ void* _decode(void* args) {
                                pPlayer->decoder->codecContext->width,
                                pPlayer->decoder->codecContext->height, 1) < 0) {
     pPlayer->setError("Failed on av_image_fill_arrays: code %d", imgFillResult);
+    return nullptr;
   }
   pPlayer->decoder->swsContext =
       sws_getContext(pPlayer->decoder->codecContext->width,
@@ -140,6 +148,7 @@ void* _decode(void* args) {
   pPlayer->decoder->frame = av_frame_alloc();
   pPlayer->decoder->packet = av_packet_alloc();
   pPlayer->config->resetConsumer();
+  //  pPlayer->decoder->formatContext->flags |= AVFMT_FLAG_NONBLOCK;
   while (av_read_frame(pPlayer->decoder->formatContext,
                        pPlayer->decoder->packet) == 0) {
     if (pPlayer->state == RPlayerState::STOPPED ||
