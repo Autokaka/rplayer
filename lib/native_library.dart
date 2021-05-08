@@ -95,7 +95,7 @@ class NativeLibrary {
       _RPlayer_setConfig_ptr.asFunction<_dart_RPlayer_setConfig>();
 
   /// Release all resources used in decode thread.
-  int RPlayer_dispose(
+  void RPlayer_dispose(
     ffi.Pointer<ffi.Void> arg0,
   ) {
     return _RPlayer_dispose(
@@ -264,11 +264,11 @@ typedef _dart_RPlayer_setConfig = void Function(
   ffi.Pointer<ffi.Void> arg1,
 );
 
-typedef _c_RPlayer_dispose = ffi.Int32 Function(
+typedef _c_RPlayer_dispose = ffi.Void Function(
   ffi.Pointer<ffi.Void> arg0,
 );
 
-typedef _dart_RPlayer_dispose = int Function(
+typedef _dart_RPlayer_dispose = void Function(
   ffi.Pointer<ffi.Void> arg0,
 );
 

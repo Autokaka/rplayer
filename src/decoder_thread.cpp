@@ -46,8 +46,8 @@ void* _decode(void* args) {
   av_dict_set(&options, "probesize", "32", 0);
   av_dict_set(&options, "analyzeduration", "0", 0);
   av_dict_set(&options, "fflags", "discardcorrupt", 0);
-  av_dict_set(&options, "flush_packets", "1", 0);
-  av_dict_set(&options, "avioflags", "direct", 0);
+  //  av_dict_set(&options, "flush_packets", "1", 0);
+  //  av_dict_set(&options, "avioflags", "direct", 0);
   if (avformat_find_stream_info(pPlayer->decoder->formatContext, nullptr) < 0) {
     pPlayer->setError("Failed to read video info from stream.");
     return nullptr;
@@ -127,19 +127,6 @@ void* _decode(void* args) {
   }
 
   /**
-   * Create buffer for nativeWindow to draw in later loop.
-   */
-  pPlayer->pTextureAndroid = new TextureAndroid();
-  ANativeWindow_Buffer nativeWindowBuffer;
-  // Setting the display size by its pixels rather than physics size.
-  // This means if your physics size is not the same as your display size,
-  // The image may seem stretched or compressed in your screen.
-  ANativeWindow_setBuffersGeometry(pPlayer->pTextureAndroid->nativeWindow,
-                                   pPlayer->decoder->codecContext->width,
-                                   pPlayer->decoder->codecContext->height,
-                                   WINDOW_FORMAT_RGBA_8888);
-
-  /**
    * Start looping to receive/send av_packet.
    * In packet we store picture rgba data and
    * submit it to Dart side.
@@ -148,7 +135,6 @@ void* _decode(void* args) {
   pPlayer->decoder->frame = av_frame_alloc();
   pPlayer->decoder->packet = av_packet_alloc();
   pPlayer->config->resetConsumer();
-  //  pPlayer->decoder->formatContext->flags |= AVFMT_FLAG_NONBLOCK;
   while (av_read_frame(pPlayer->decoder->formatContext,
                        pPlayer->decoder->packet) == 0) {
     if (pPlayer->state == RPlayerState::STOPPED ||
@@ -177,38 +163,8 @@ void* _decode(void* args) {
       av_packet_unref(pPlayer->decoder->packet);
       continue;
     }
-    if (int lockState =
-            ANativeWindow_lock(pPlayer->pTextureAndroid->nativeWindow,
-                               &nativeWindowBuffer, NULL) < 0) {
-      pPlayer->setError("Failed to lock native window: code %d", lockState);
-      av_packet_unref(pPlayer->decoder->packet);
-      return nullptr;
-    }
-
-    /**
-     * Safely draw on native window.
-     * Find address of the pixel list.
-     * Note that RGBA pictures only store pixels in data[0].
-     * If using YUV pictures, we will have data[0], data[1], data[2]
-     * to store pixels.
-     */
-    sws_scale(pPlayer->decoder->swsContext,
-              static_cast<const uint8_t* const*>(pPlayer->decoder->frame->data),
-              pPlayer->decoder->frame->linesize, 0,
-              pPlayer->decoder->frame->height, pPlayer->decoder->outFrame->data,
-              pPlayer->decoder->outFrame->linesize);
-    uint8_t* src = pPlayer->decoder->outFrame->data[0];
-    int srcStride = pPlayer->decoder->outFrame->linesize[0];
-    uint8_t* dst = static_cast<uint8_t*>(nativeWindowBuffer.bits);
-    int dstStride = nativeWindowBuffer.stride * 4;
-    for (int i = 0; i < pPlayer->decoder->codecContext->height; i++) {
-      memcpy(dst + i * dstStride, src + i * srcStride, srcStride);
-    }
-
-    if (int unlockState = ANativeWindow_unlockAndPost(
-                              pPlayer->pTextureAndroid->nativeWindow) < 0) {
-      pPlayer->setError("Failed to unlock native window: code %d", unlockState);
-      av_packet_unref(pPlayer->decoder->packet);
+    if (pPlayer->renderThread == 0 && pPlayer->createRenderThread() != 0) {
+      pPlayer->setError("Failed to create render thread.");
       return nullptr;
     }
     av_packet_unref(pPlayer->decoder->packet);
@@ -232,16 +188,17 @@ void* _retryDecode(void* args) {
     return nullptr;
   }
 
+  pPlayer->setBuffering();
   usleep(pPlayer->config->retryDelayInMilliseconds * 1000);
   pPlayer->config->_consumer->retryTimesOnDisconnect--;
   sprintf(pPlayer->msg,
           "Decode thread %ld: lost connection. Retrying... (%d/%d)",
-          pPlayer->pid,
+          pPlayer->decodeThread,
           pPlayer->config->retryTimesOnDisconnect -
               pPlayer->config->_consumer->retryTimesOnDisconnect,
           pPlayer->config->retryTimesOnDisconnect);
   LOG::D(pPlayer->msg);
-  pPlayer->decoder->dispose();
+  pPlayer->decoder->release();
   pPlayer->decoder = new RPlayerDecoder();
   return _decode(static_cast<void*>(pPlayer));
 }

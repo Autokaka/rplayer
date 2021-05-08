@@ -5,6 +5,7 @@
 #include "config.h"
 #include "decoder.h"
 #include "decoder_thread.h"
+#include "render_thread.h"
 #include "texture/texture_android.h"
 #include "util/log.h"
 
@@ -25,15 +26,20 @@ class RPlayer {
   char* url;
   char msg[1024];
   int state = RPlayerState::INIT;
-  TextureAndroid* pTextureAndroid;
-  RPlayerDecoder* decoder = new RPlayerDecoder();
+
+  TextureAndroid* render = new TextureAndroid();
+  pthread_t renderThread;
+  RPlayerDecoder* decoder = RPlayerDecoder::createInstance();
+  pthread_t decodeThread;
   RPlayerConfig* config = RPlayerConfig::createInstance();
-  pthread_t pid;
 
  public:
   static RPlayer* createInstance();
+  void dispose();
+
   int createDecodeThread(char*);
-  int dispose();
+  int createRenderThread();
+
   int getHeight();
   int getWidth();
 

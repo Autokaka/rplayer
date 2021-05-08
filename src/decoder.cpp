@@ -1,6 +1,10 @@
 #include "decoder.h"
 
-void RPlayerDecoder::dispose() {
+RPlayerDecoder* RPlayerDecoder::createInstance() {
+  return new RPlayerDecoder();
+}
+
+void RPlayerDecoder::release() {
   if (swsContext != nullptr) {
     sws_freeContext(swsContext);
   }

@@ -22,16 +22,18 @@ class RPlayerView extends StatefulWidget {
 }
 
 class _RPlayerViewState extends State<RPlayerView> {
-  int textureId = -1;
+  bool showTextureWidget = false;
 
   void didChangePlayerState() {
-    if (widget.player.textureId != textureId) {
+    if (widget.player.textureId >= 0 && widget.player.size != Size.zero) {
       setState(() {
-        textureId = widget.player.textureId;
+        showTextureWidget = true;
       });
     }
     if (widget.player.state == RPlayerState.ERROR) {
-      setState(() {});
+      setState(() {
+        showTextureWidget = false;
+      });
     }
   }
 
@@ -50,11 +52,10 @@ class _RPlayerViewState extends State<RPlayerView> {
       child: Stack(
         children: [
           Center(
-            child: (widget.player.size != Size.zero &&
-                    widget.player.textureId >= 0)
+            child: (showTextureWidget)
                 ? AspectRatio(
                     aspectRatio: widget.player.size.aspectRatio,
-                    child: Texture(textureId: textureId),
+                    child: Texture(textureId: widget.player.textureId),
                   )
                 : (widget.player.state == RPlayerState.ERROR)
                 ? widget.error ??

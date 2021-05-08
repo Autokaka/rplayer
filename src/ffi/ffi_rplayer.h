@@ -20,7 +20,7 @@ DART_EXPORT void RPlayer_setPaused(void*);
 
 DART_EXPORT void RPlayer_setConfig(void*, void*);
 
-DART_EXPORT int RPlayer_dispose(void*);
+DART_EXPORT void RPlayer_dispose(void*);
 
 DART_EXPORT int RPlayer_getHeight(void*);
 

@@ -29,13 +29,9 @@ DART_EXPORT void RPlayer_setConfig(void* p, void* c) {
   pPlayer->config = static_cast<RPlayerConfig*>(c);
 }
 
-DART_EXPORT int RPlayer_dispose(void* p) {
+DART_EXPORT void RPlayer_dispose(void* p) {
   RPlayer* pPlayer = static_cast<RPlayer*>(p);
-  if (int disposeResult = pPlayer->dispose() != 0) {
-    return disposeResult;
-  }
-  delete pPlayer;
-  return 0;
+  pPlayer->dispose();
 }
 
 DART_EXPORT int RPlayer_getHeight(void* p) {
@@ -60,10 +56,7 @@ DART_EXPORT char* RPlayer_getMessage(void* p) {
 
 DART_EXPORT long long RPlayer_getTextureId(void* p) {
   RPlayer* pPlayer = static_cast<RPlayer*>(p);
-  if (pPlayer->pTextureAndroid == nullptr) {
-    return -1;
-  }
-  return pPlayer->pTextureAndroid->id;
+  return pPlayer->render->id;
 }
 
 //////////////////////////////////////////
