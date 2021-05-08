@@ -1,5 +1,9 @@
 #include "decoder.h"
 
+RPlayerDecoder* RPlayerDecoder::createInstance() {
+  return new RPlayerDecoder();
+}
+
 void RPlayerDecoder::release() {
   if (swsContext != nullptr) {
     sws_freeContext(swsContext);
@@ -25,6 +29,8 @@ void RPlayerDecoder::release() {
     avformat_close_input(&formatContext);
     avformat_free_context(formatContext);
   }
+
+  avformat_network_deinit();
 
   delete this;
 }

@@ -13,9 +13,17 @@ void* _decode(void* args) {
   /**
    * Create format context and open video stream.
    */
+  AVDictionary* options = nullptr;
+  av_dict_set(&options, "fflags", "nobuffer", 0);
+  av_dict_set(&options, "rtsp_transport", "tcp", 0);
+  av_dict_set(&options, "stimeout", "20000000", 0);  // tcp
+  av_dict_set(&options, "buffer_size", "1024000", 0);
+  //  av_dict_set(&options, "rtsp_transport", "udp", 0);
+  //  av_dict_set(&options, "timeout", "20000000", 0); // udp
   pPlayer->decoder->formatContext = avformat_alloc_context();
-  if (int openResult = avformat_open_input(&(pPlayer->decoder->formatContext),
-                                           pPlayer->url, nullptr, nullptr) < 0) {
+  if (int openResult =
+          avformat_open_input(&(pPlayer->decoder->formatContext), pPlayer->url,
+                              nullptr, &options) < 0) {
     if (pPlayer->config->_consumer->retryTimesOnDisconnect > 0) {
       return _retryDecode(static_cast<void*>(pPlayer));
     }
@@ -35,7 +43,12 @@ void* _decode(void* args) {
    * Now we need to find the video stream in order to draw pictures
    * on the screen.
    */
-  if (avformat_find_stream_info(pPlayer->decoder->formatContext, NULL) < 0) {
+  av_dict_set(&options, "probesize", "32", 0);
+  av_dict_set(&options, "analyzeduration", "0", 0);
+  av_dict_set(&options, "fflags", "discardcorrupt", 0);
+  //  av_dict_set(&options, "flush_packets", "1", 0);
+  //  av_dict_set(&options, "avioflags", "direct", 0);
+  if (avformat_find_stream_info(pPlayer->decoder->formatContext, nullptr) < 0) {
     pPlayer->setError("Failed to read video info from stream.");
     return nullptr;
   }
@@ -75,8 +88,12 @@ void* _decode(void* args) {
     pPlayer->setError("Failed to inject params to decoder context.");
     return nullptr;
   }
+  av_dict_set(&options, "flags", "low_delay", 0);
+  av_dict_set(&options, "preset", "ultrafast", 0);
+  av_dict_set(&options, "tune", "zerolatency", 0);
   if (avcodec_open2(pPlayer->decoder->codecContext, codec, nullptr) < 0) {
     pPlayer->setError("Failed to open decoder from context.");
+    return nullptr;
   }
 
   /**
@@ -95,6 +112,7 @@ void* _decode(void* args) {
                                pPlayer->decoder->codecContext->width,
                                pPlayer->decoder->codecContext->height, 1) < 0) {
     pPlayer->setError("Failed on av_image_fill_arrays: code %d", imgFillResult);
+    return nullptr;
   }
   pPlayer->decoder->swsContext =
       sws_getContext(pPlayer->decoder->codecContext->width,
@@ -102,24 +120,11 @@ void* _decode(void* args) {
                      pPlayer->decoder->codecContext->pix_fmt,
                      pPlayer->decoder->codecContext->width,
                      pPlayer->decoder->codecContext->height, AV_PIX_FMT_RGBA,
-                     SWS_BICUBIC, NULL, NULL, NULL);
+                     SWS_BICUBIC, nullptr, nullptr, nullptr);
   if (pPlayer->decoder->swsContext == nullptr) {
     pPlayer->setError("Failed to create picture context.");
     return nullptr;
   }
-
-  /**
-   * Create buffer for nativeWindow to draw in later loop.
-   */
-  pPlayer->pTextureAndroid = new TextureAndroid();
-  ANativeWindow_Buffer nativeWindowBuffer;
-  // Setting the display size by its pixels rather than physics size.
-  // This means if your physics size is not the same as your display size,
-  // The image may seem stretched or compressed in your screen.
-  ANativeWindow_setBuffersGeometry(pPlayer->pTextureAndroid->nativeWindow,
-                                   pPlayer->decoder->codecContext->width,
-                                   pPlayer->decoder->codecContext->height,
-                                   WINDOW_FORMAT_RGBA_8888);
 
   /**
    * Start looping to receive/send av_packet.
@@ -158,38 +163,8 @@ void* _decode(void* args) {
       av_packet_unref(pPlayer->decoder->packet);
       continue;
     }
-    if (int lockState =
-            ANativeWindow_lock(pPlayer->pTextureAndroid->nativeWindow,
-                               &nativeWindowBuffer, NULL) < 0) {
-      pPlayer->setError("Failed to lock native window: code %d", lockState);
-      av_packet_unref(pPlayer->decoder->packet);
-      return nullptr;
-    }
-
-    /**
-     * Safely draw on native window.
-     * Find address of the pixel list.
-     * Note that RGBA pictures only store pixels in data[0].
-     * If using YUV pictures, we will have data[0], data[1], data[2]
-     * to store pixels.
-     */
-    sws_scale(pPlayer->decoder->swsContext,
-              static_cast<const uint8_t* const*>(pPlayer->decoder->frame->data),
-              pPlayer->decoder->frame->linesize, 0,
-              pPlayer->decoder->frame->height, pPlayer->decoder->outFrame->data,
-              pPlayer->decoder->outFrame->linesize);
-    uint8_t* src = pPlayer->decoder->outFrame->data[0];
-    int srcStride = pPlayer->decoder->outFrame->linesize[0];
-    uint8_t* dst = static_cast<uint8_t*>(nativeWindowBuffer.bits);
-    int dstStride = nativeWindowBuffer.stride * 4;
-    for (int i = 0; i < pPlayer->decoder->codecContext->height; i++) {
-      memcpy(dst + i * dstStride, src + i * srcStride, srcStride);
-    }
-
-    if (int unlockState = ANativeWindow_unlockAndPost(
-                              pPlayer->pTextureAndroid->nativeWindow) < 0) {
-      pPlayer->setError("Failed to unlock native window: code %d", unlockState);
-      av_packet_unref(pPlayer->decoder->packet);
+    if (pPlayer->renderThread == 0 && pPlayer->createRenderThread() != 0) {
+      pPlayer->setError("Failed to create render thread.");
       return nullptr;
     }
     av_packet_unref(pPlayer->decoder->packet);
@@ -213,11 +188,12 @@ void* _retryDecode(void* args) {
     return nullptr;
   }
 
+  pPlayer->setBuffering();
   usleep(pPlayer->config->retryDelayInMilliseconds * 1000);
   pPlayer->config->_consumer->retryTimesOnDisconnect--;
   sprintf(pPlayer->msg,
           "Decode thread %ld: lost connection. Retrying... (%d/%d)",
-          pPlayer->pid,
+          pPlayer->decodeThread,
           pPlayer->config->retryTimesOnDisconnect -
               pPlayer->config->_consumer->retryTimesOnDisconnect,
           pPlayer->config->retryTimesOnDisconnect);

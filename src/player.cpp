@@ -7,32 +7,54 @@ RPlayer* RPlayer::createInstance() {
 }
 
 int RPlayer::createDecodeThread(char* urlIn) {
-  if (pid != 0) {
+  if (decodeThread != 0) {
     dispose();
     state = RPlayerState::INIT;
   }
 
   url = urlIn;
-  return pthread_create(&pid, nullptr, _decode, static_cast<void*>(this));
+  int createResult =
+      pthread_create(&decodeThread, nullptr, _decode, static_cast<void*>(this));
+  if (createResult == 0) {
+    LOG::D("Decode thread created. PID: %ld", renderThread);
+  }
+  return createResult;
 }
 
-int RPlayer::dispose() {
-  setStopped();
-  if (pid == 0) {
+int RPlayer::createRenderThread() {
+  if (renderThread != 0) {
+    LOG::E("Render thread already exists, no need to create more.");
     return 0;
   }
+  int createResult =
+      pthread_create(&renderThread, nullptr, _render, static_cast<void*>(this));
+  if (createResult == 0) {
+    LOG::D("Render thread created. PID: %ld", renderThread);
+  }
+  return createResult;
+}
 
-  if (int threadReturn = pthread_join(pid, nullptr) != 0) {
+void RPlayer::dispose() {
+  setStopped();
+  if (decodeThread == 0) {
+    delete this;
+    return;
+  }
+
+  if (int threadReturn = pthread_join(renderThread, nullptr) != 0) {
+    setError("Failed to detach render thread: code %d.", threadReturn);
+  }
+
+  LOG::D("Render thread finished. PID: %ld", renderThread);
+
+  if (int threadReturn = pthread_join(decodeThread, nullptr) != 0) {
     setError("Failed to detach decode thread: code %d.", threadReturn);
   }
 
-  LOG::D("Decode thread finished. PID: %ld", pid);
+  LOG::D("Decode thread finished. PID: %ld", decodeThread);
 
-  if (pTextureAndroid != nullptr && pTextureAndroid->release() != 0) {
-    setError(
-        "Failed to release native window. This might cause unpredictable "
-        "error when you create a decode thread from RPlayer next time.");
-  }
+  render->release();
+  render = nullptr;
 
   decoder->release();
   decoder = nullptr;
@@ -40,7 +62,7 @@ int RPlayer::dispose() {
   config->release();
   config = nullptr;
 
-  return 0;
+  delete this;
 }
 
 int RPlayer::getHeight() {

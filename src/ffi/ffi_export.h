@@ -32,7 +32,7 @@ void RPlayer_setConfig(void*, void*);
 /**
  * Release all resources used in decode thread.
  */
-int RPlayer_dispose(void*);
+void RPlayer_dispose(void*);
 
 int RPlayer_getHeight(void*);
 
