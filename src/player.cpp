@@ -34,7 +34,7 @@ int RPlayer::dispose() {
         "error when you create a decode thread from RPlayer next time.");
   }
 
-  decoder->release();
+  decoder->dispose();
   decoder = nullptr;
 
   config->release();

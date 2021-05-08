@@ -241,7 +241,7 @@ void* _retryDecode(void* args) {
               pPlayer->config->_consumer->retryTimesOnDisconnect,
           pPlayer->config->retryTimesOnDisconnect);
   LOG::D(pPlayer->msg);
-  pPlayer->decoder->release();
+  pPlayer->decoder->dispose();
   pPlayer->decoder = new RPlayerDecoder();
   return _decode(static_cast<void*>(pPlayer));
 }

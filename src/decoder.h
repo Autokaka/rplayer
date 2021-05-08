@@ -19,5 +19,5 @@ class RPlayerDecoder {
   AVPacket* packet;
 
  public:
-  void release();
+  void dispose();
 };
