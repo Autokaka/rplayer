@@ -56,6 +56,9 @@ DART_EXPORT char* RPlayer_getMessage(void* p) {
 
 DART_EXPORT long long RPlayer_getTextureId(void* p) {
   RPlayer* pPlayer = static_cast<RPlayer*>(p);
+  if (pPlayer->render == nullptr) {
+    return -1;
+  }
   return pPlayer->render->id;
 }
 

@@ -8,8 +8,7 @@ RPlayer* RPlayer::createInstance() {
 
 int RPlayer::createDecodeThread(char* urlIn) {
   if (decodeThread != 0) {
-    dispose();
-    state = RPlayerState::INIT;
+    resetState();
   }
 
   url = urlIn;
@@ -19,6 +18,18 @@ int RPlayer::createDecodeThread(char* urlIn) {
     LOG::D("Decode thread created. PID: %ld", renderThread);
   }
   return createResult;
+}
+
+void RPlayer::releaseDecodeThread() {
+  if (decodeThread == 0) {
+    return LOG::D("Decode thread finished. PID: %ld", decodeThread);
+  }
+  if (int threadReturn = pthread_join(decodeThread, nullptr) != 0) {
+    setError("Failed to detach decode thread: code %d.", threadReturn);
+  }
+  LOG::D("Decode thread finished. PID: %ld", decodeThread);
+  decodeThread = 0;
+  decoder = nullptr;
 }
 
 int RPlayer::createRenderThread() {
@@ -34,30 +45,22 @@ int RPlayer::createRenderThread() {
   return createResult;
 }
 
-void RPlayer::dispose() {
-  setStopped();
-  if (decodeThread == 0) {
-    delete this;
-    return;
+void RPlayer::releaseRenderThread() {
+  if (renderThread == 0) {
+    return LOG::D("Render thread finished. PID: %ld", renderThread);
   }
-
   if (int threadReturn = pthread_join(renderThread, nullptr) != 0) {
     setError("Failed to detach render thread: code %d.", threadReturn);
   }
-
   LOG::D("Render thread finished. PID: %ld", renderThread);
-
-  if (int threadReturn = pthread_join(decodeThread, nullptr) != 0) {
-    setError("Failed to detach decode thread: code %d.", threadReturn);
-  }
-
-  LOG::D("Decode thread finished. PID: %ld", decodeThread);
-
-  render->release();
+  renderThread = 0;
   render = nullptr;
+}
 
-  decoder->release();
-  decoder = nullptr;
+void RPlayer::dispose() {
+  setStopped();
+
+  releaseDecodeThread();
 
   config->release();
   config = nullptr;
@@ -119,4 +122,13 @@ void RPlayer::setError(const char* fmt, ...) {
   __android_log_vprint(ANDROID_LOG_ERROR, LOG::TAG, fmt, args);
   vsprintf(msg, fmt, args);
   va_end(args);
+}
+
+void RPlayer::resetState() {
+  setStopped();
+  releaseRenderThread();
+  render = new TextureAndroid();
+  releaseDecodeThread();
+  decoder = RPlayerDecoder::createInstance();
+  state = RPlayerState::INIT;
 }
