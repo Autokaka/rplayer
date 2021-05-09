@@ -16,5 +16,4 @@ void RPlayerConfig::resetConsumer() {
 void RPlayerConfig::release() {
   delete _consumer;
   _consumer = nullptr;
-  delete this;
 }

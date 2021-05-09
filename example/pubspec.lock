@@ -6,7 +6,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "7764ab3ca7606b098e96d0cfaca83d3a1ca823b8"
+      resolved-ref: "8999ccf54707702e609c1edede0b0c873e242bbf"
       url: "https://github.com/Autokaka/android_dpad_detector.git"
     source: git
     version: "0.0.1"

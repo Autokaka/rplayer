@@ -9,6 +9,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
   }
 
   // register plugin and its methods
+  av_jni_set_java_vm(jvm, nullptr);
   FFIAndroid::FFIRegister(jvm);
   TextureAndroid::FFIRegister(env);
 

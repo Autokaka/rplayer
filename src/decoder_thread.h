@@ -2,6 +2,6 @@
 
 #include <unistd.h>
 #include "player.h"
+#include "util/nppm.h"
 
 void* _decode(void*);
-void* _retryDecode(void*);

@@ -38,7 +38,9 @@ class RPlayer {
   void dispose();
 
   int createDecodeThread(char*);
+  void releaseDecodeThread();
   int createRenderThread();
+  void releaseRenderThread();
 
   int getHeight();
   int getWidth();
@@ -49,4 +51,5 @@ class RPlayer {
   void setPaused();
   void setStopped();
   void setError(const char*, ...);
+  void resetState();
 };
