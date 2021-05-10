@@ -1,3 +1,4 @@
+import 'package:android_dpad_detector/dpad_detector.dart';
 import 'package:flutter/material.dart';
 import 'package:rplayer/rplayer.dart';
 
@@ -12,17 +13,17 @@ class _VideoTestPageState extends State<VideoTestPage> {
       ..retryTimesOnDisconnect = 10
       ..retryDelayInMilliseconds = 2000,
   );
-  // final player2 = RPlayer(
-  //   config: RPlayerConfig()
-  //     ..retryTimesOnDisconnect = 10
-  //     ..retryDelayInMilliseconds = 2000,
-  // );
+  final player2 = RPlayer(
+    config: RPlayerConfig()
+      ..retryTimesOnDisconnect = 10
+      ..retryDelayInMilliseconds = 2000,
+  );
 
   @override
   void initState() {
     super.initState();
-    player.startPlayWhenReady('rtsp://admin:admin@192.168.1.102:8554/live');
-    // player2.startPlayWhenReady('rtsp://admin:admin@192.168.1.102:8554/live');
+    player.startPlayWhenReady('rtsp://admin:admin@192.168.1.104:8554/live');
+    player2.startPlayWhenReady('rtsp://admin:admin@192.168.1.104:8554/live');
   }
 
   @override
@@ -31,19 +32,30 @@ class _VideoTestPageState extends State<VideoTestPage> {
       appBar: AppBar(
         title: const Text('RPlayer Video Test Page'),
       ),
-      body: ListView(
-        shrinkWrap: true,
+      body: Flex(
+        direction: (MediaQuery.of(context).size.width >
+                MediaQuery.of(context).size.height)
+            ? Axis.horizontal
+            : Axis.vertical,
         children: [
-          RPlayerView(
-            player: player,
-            width: MediaQuery.of(context).size.width,
-            height: 300,
+          Expanded(
+            child: DPadDetector(
+              child: RPlayerView(
+                player: player,
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+              ),
+            ),
           ),
-          // RPlayerView(
-          //   player: player2,
-          //   width: MediaQuery.of(context).size.width,
-          //   height: 300,
-          // ),
+          Expanded(
+            child: DPadDetector(
+              child: RPlayerView(
+                player: player2,
+                width: MediaQuery.of(context).size.width,
+                height: 300,
+              ),
+            ),
+          ),
         ],
       ),
     );

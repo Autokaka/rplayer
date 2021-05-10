@@ -43,27 +43,25 @@ void* _render(void* args) {
       pPlayer->render->nativeWindow, pPlayer->decoder->codecContext->width,
       pPlayer->decoder->codecContext->height, WINDOW_FORMAT_RGBA_8888);
 
+  /**
+   * Safely draw on native window.
+   * Find address of the pixel list.
+   * Note that RGBA pictures only store pixels in data[0].
+   * If using YUV pictures, we will have data[0], data[1], data[2]
+   * to store pixels.
+   */
   while (pPlayer->state != RPlayerState::STOPPED &&
          pPlayer->state != RPlayerState::ERROR) {
     if (pPlayer->state == RPlayerState::BUFFERING ||
         pPlayer->state == RPlayerState::PAUSED) {
       continue;
     }
-
     if (ANativeWindow_lock(pPlayer->render->nativeWindow, &nativeWindowBuffer,
                            nullptr) < 0) {
       pPlayer->setError("Failed to lock native window.");
       pPlayer->render->release();
       return nullptr;
     }
-
-    /**
-     * Safely draw on native window.
-     * Find address of the pixel list.
-     * Note that RGBA pictures only store pixels in data[0].
-     * If using YUV pictures, we will have data[0], data[1], data[2]
-     * to store pixels.
-     */
     sws_scale(pPlayer->decoder->swsContext,
               static_cast<const uint8_t* const*>(pPlayer->decoder->frame->data),
               pPlayer->decoder->frame->linesize, 0,
