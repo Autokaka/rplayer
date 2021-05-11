@@ -83,7 +83,6 @@ class _RPlayerViewState extends State<RPlayerView> {
   @override
   void dispose() {
     widget.player.removeListener(didChangePlayerState);
-    widget.player.dispose();
     super.dispose();
   }
 }

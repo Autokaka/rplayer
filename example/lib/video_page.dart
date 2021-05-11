@@ -62,4 +62,11 @@ class _VideoTestPageState extends State<VideoTestPage> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    player.dispose();
+    // player2.dispose();
+    super.dispose();
+  }
 }
