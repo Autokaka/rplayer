@@ -21,4 +21,5 @@ class RPlayerDecoder {
  public:
   static RPlayerDecoder* createInstance();
   void release();
+  int openCodec(AVCodecParameters*, AVCodec*);
 };
