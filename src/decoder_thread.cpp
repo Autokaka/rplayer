@@ -115,7 +115,6 @@ void* _decode(void* args) {
     }
     if (pPlayer->renderThread == 0 && pPlayer->createRenderThread() != 0) {
       pPlayer->setError("Failed to create render thread.");
-      pPlayer->decoder->release();
       break;
     }
   }
