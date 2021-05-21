@@ -64,8 +64,11 @@ void* _decode(void* args) {
    */
   AVCodecParameters* codecParams =
       pPlayer->decoder->formatContext->streams[videoStreamIndex]->codecpar;
-  int openCodecResult = pPlayer->decoder->openCodec(
-      codecParams, avcodec_find_decoder_by_name("h264_mediacodec"));
+  int openCodecResult =
+      pPlayer->config->preferHardcodec
+          ? pPlayer->decoder->openCodec(
+                codecParams, avcodec_find_decoder_by_name("h264_mediacodec"))
+          : -1;
   if (openCodecResult != 0) {
     openCodecResult = pPlayer->decoder->openCodec(
         codecParams, avcodec_find_decoder(codecParams->codec_id));

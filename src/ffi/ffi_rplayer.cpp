@@ -79,4 +79,9 @@ DART_EXPORT void RPlayerConfig_setRetryDelayInMilliseconds(void* c, int value) {
   RPlayerConfig* pConfig = static_cast<RPlayerConfig*>(c);
   pConfig->retryDelayInMilliseconds = value;
 }
+
+DART_EXPORT void RPlayerConfig_setPreferHardcodec(void* c, int value) {
+  RPlayerConfig* pConfig = static_cast<RPlayerConfig*>(c);
+  pConfig->preferHardcodec = value;
+}
 }

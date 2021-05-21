@@ -41,4 +41,6 @@ DART_EXPORT void* RPlayerConfig_createInstance();
 DART_EXPORT void RPlayerConfig_setRetryTimesOnDisconnect(void*, int);
 
 DART_EXPORT void RPlayerConfig_setRetryDelayInMilliseconds(void*, int);
+
+DART_EXPORT void RPlayerConfig_setPreferHardcodec(void*, int);
 }
