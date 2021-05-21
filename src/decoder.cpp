@@ -49,8 +49,8 @@ int RPlayerDecoder::openCodec(AVCodecParameters* codecParams, AVCodec* codec) {
   // codecContext->err_recognition |= AV_EF_EXPLODE;
   // codecContext->skip_loop_filter = AVDiscard::AVDISCARD_NONE;
   // codecContext->skip_frame = AVDiscard::AVDISCARD_NONREF;
-  // codecContext->delay = 0;
-  codecContext->thread_count = 4;
+  codecContext->delay = 1;
+  // codecContext->thread_count = 4;
   codecContext->flags |= AV_CODEC_FLAG_LOW_DELAY;
   if (codecContext == nullptr) {
     return -1;
