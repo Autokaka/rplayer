@@ -32,6 +32,13 @@ class RPlayerConfig {
    */
   int retryDelayInMilliseconds = 0;
 
+  /**
+   * Let player use hardcodec first, if
+   * fail to use hardcodec, player will
+   * fallback to softcodec.
+   */
+  int preferHardcodec = 1;
+
  public:
   static RPlayerConfig* createInstance();
   void resetConsumer();

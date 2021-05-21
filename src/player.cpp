@@ -108,6 +108,10 @@ void RPlayer::setPaused() {
 }
 
 void RPlayer::setStopped() {
+  if (state == RPlayerState::ERROR) {
+    LOG::E("Failed to set player state to STOPPED: player in state %d", state);
+    return;
+  }
   state = RPlayerState::STOPPED;
 }
 

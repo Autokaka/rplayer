@@ -10,4 +10,7 @@ class RPlayerConfig {
 
   set retryDelayInMilliseconds(int value) =>
       _lib.RPlayerConfig_setRetryDelayInMilliseconds(_pNativeConfig, value);
+
+  set preferHardcodec(int value) =>
+      _lib.RPlayerConfig_setPreferHardcodec(_pNativeConfig, value);
 }

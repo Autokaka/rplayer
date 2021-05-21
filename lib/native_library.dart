@@ -222,6 +222,23 @@ class NativeLibrary {
       _RPlayerConfig_setRetryDelayInMilliseconds =
       _RPlayerConfig_setRetryDelayInMilliseconds_ptr.asFunction<
           _dart_RPlayerConfig_setRetryDelayInMilliseconds>();
+
+  void RPlayerConfig_setPreferHardcodec(
+    ffi.Pointer<ffi.Void> arg0,
+    int arg1,
+  ) {
+    return _RPlayerConfig_setPreferHardcodec(
+      arg0,
+      arg1,
+    );
+  }
+
+  late final _RPlayerConfig_setPreferHardcodec_ptr =
+      _lookup<ffi.NativeFunction<_c_RPlayerConfig_setPreferHardcodec>>(
+          'RPlayerConfig_setPreferHardcodec');
+  late final _dart_RPlayerConfig_setPreferHardcodec
+      _RPlayerConfig_setPreferHardcodec = _RPlayerConfig_setPreferHardcodec_ptr
+          .asFunction<_dart_RPlayerConfig_setPreferHardcodec>();
 }
 
 typedef _c_RPlayer_createInstance = ffi.Pointer<ffi.Void> Function();
@@ -332,6 +349,16 @@ typedef _c_RPlayerConfig_setRetryDelayInMilliseconds = ffi.Void Function(
 );
 
 typedef _dart_RPlayerConfig_setRetryDelayInMilliseconds = void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  int arg1,
+);
+
+typedef _c_RPlayerConfig_setPreferHardcodec = ffi.Void Function(
+  ffi.Pointer<ffi.Void> arg0,
+  ffi.Int32 arg1,
+);
+
+typedef _dart_RPlayerConfig_setPreferHardcodec = void Function(
   ffi.Pointer<ffi.Void> arg0,
   int arg1,
 );

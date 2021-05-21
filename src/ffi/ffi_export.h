@@ -57,3 +57,5 @@ void* RPlayerConfig_createInstance();
 void RPlayerConfig_setRetryTimesOnDisconnect(void*, int);
 
 void RPlayerConfig_setRetryDelayInMilliseconds(void*, int);
+
+void RPlayerConfig_setPreferHardcodec(void*, int);
