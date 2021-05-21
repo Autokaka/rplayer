@@ -102,18 +102,27 @@ void* _decode(void* args) {
       av_packet_unref(pPlayer->decoder->packet);
       continue;
     }
-    int sendPacketState = avcodec_send_packet(pPlayer->decoder->codecContext,
-                                              pPlayer->decoder->packet);
-    av_packet_unref(pPlayer->decoder->packet);
-    if (sendPacketState != 0) {
-      LOG::E("Failed to send packet: %s.", av_err2str(sendPacketState));
-      continue;
-    }
-    int recvFrameState = avcodec_receive_frame(pPlayer->decoder->codecContext,
-                                               pPlayer->decoder->frame);
-    if (recvFrameState != 0) {
-      LOG::E("Failed to receive frame: %s.", av_err2str(recvFrameState));
-      av_frame_unref(pPlayer->decoder->frame);
+    // int sendPacketState = avcodec_send_packet(pPlayer->decoder->codecContext,
+    //                                           pPlayer->decoder->packet);
+    // av_packet_unref(pPlayer->decoder->packet);
+    // if (sendPacketState != 0) {
+    //   LOG::E("Failed to send packet: %s.", av_err2str(sendPacketState));
+    //   continue;
+    // }
+    // int recvFrameState =
+    // avcodec_receive_frame(pPlayer->decoder->codecContext,
+    //                                            pPlayer->decoder->frame);
+    // if (recvFrameState != 0) {
+    //   LOG::E("Failed to receive frame: %s.", av_err2str(recvFrameState));
+    //   continue;
+    // }
+    int gop[1] = {0};
+    int decodeResult = avcodec_decode_video2(pPlayer->decoder->codecContext,
+                                             pPlayer->decoder->frame, gop,
+                                             pPlayer->decoder->packet);
+    if (decodeResult < 0) {
+      LOG::E("Failed on avcodec_decode_video2: %s", av_err2str(decodeResult));
+      avcodec_flush_buffers(pPlayer->decoder->codecContext);
       continue;
     }
     if (pPlayer->renderThread == 0 && pPlayer->createRenderThread() != 0) {
