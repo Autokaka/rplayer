@@ -11,7 +11,8 @@ class _VideoTestPageState extends State<VideoTestPage> {
   final player = RPlayer(
     config: RPlayerConfig()
       ..retryTimesOnDisconnect = 10
-      ..retryDelayInMilliseconds = 2000,
+      ..retryDelayInMilliseconds = 2000
+      ..preferHardcodec = 0,
   );
   // final player2 = RPlayer(
   //   config: RPlayerConfig()
@@ -22,7 +23,7 @@ class _VideoTestPageState extends State<VideoTestPage> {
   @override
   void initState() {
     super.initState();
-    player.startPlayWhenReady('rtsp://admin:admin@192.168.1.104:8554/live');
+    player.startPlayWhenReady('rtsp://admin:admin@192.168.1.102:8554/live');
     // player2.startPlayWhenReady('rtsp://admin:admin@192.168.1.104:8554/live');
   }
 
