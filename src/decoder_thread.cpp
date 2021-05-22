@@ -97,8 +97,7 @@ void* _decode(void* args) {
              pPlayer->state);
       break;
     }
-    if (pPlayer->decoder->packet->stream_index != videoStreamIndex ||
-        pPlayer->state == RPlayerState::PAUSED) {
+    if (pPlayer->decoder->packet->stream_index != videoStreamIndex) {
       av_packet_unref(pPlayer->decoder->packet);
       continue;
     }
