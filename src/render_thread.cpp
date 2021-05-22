@@ -54,6 +54,7 @@ void* _render(void* args) {
          pPlayer->state != RPlayerState::ERROR) {
     if (pPlayer->state == RPlayerState::BUFFERING ||
         pPlayer->state == RPlayerState::PAUSED) {
+      usleep(100000);
       continue;
     }
     if (ANativeWindow_lock(pPlayer->render->nativeWindow, &nativeWindowBuffer,
