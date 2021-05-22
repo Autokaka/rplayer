@@ -10,16 +10,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  ffigen: ^2.4.2
+  ffigen: ^3.0.0
 
 dev_dependencies:
   pedantic: ^1.11.0
 
 ffigen:
-  output: 'lib/native_library.dart'
+  output: "lib/native_library.dart"
   headers:
     entry-points:
-      - 'src/ffi/ffi_export.h'
+      - "src/ffi/ffi_export.h"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
