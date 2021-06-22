@@ -1,7 +1,7 @@
 #include "jni_loader.h"
 
 extern "C" {
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved) {
+JNIEXPORT jint JNI_OnLoad(JavaVM* jvm, void* reserved) {
   JNIEnv* env;
 
   if (jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
