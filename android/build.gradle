@@ -1,4 +1,4 @@
-group 'com.dshitpie.rplayer.rplayer'
+group 'com.dshitpie.rplayer'
 version '1.0'
 
 buildscript {

@@ -4,9 +4,9 @@
 
 #include "rplayer_plugin.h"
 
-void RplayerPluginCApiRegisterWithRegistrar(
+void RPlayerPluginCApiRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar) {
-  rplayer::RplayerPlugin::RegisterWithRegistrar(
+  rplayer::RPlayerPlugin::RegisterWithRegistrar(
       flutter::PluginRegistrarManager::GetInstance()
           ->GetRegistrar<flutter::PluginRegistrarWindows>(registrar));
 }

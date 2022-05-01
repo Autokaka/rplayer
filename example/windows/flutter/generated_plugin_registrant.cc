@@ -6,9 +6,9 @@
 
 #include "generated_plugin_registrant.h"
 
-#include <rplayer/rplayer_plugin_c_api.h>
+#include <rplayer/r_player_plugin_c_api.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-  RplayerPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("RplayerPluginCApi"));
+  RPlayerPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("RPlayerPluginCApi"));
 }

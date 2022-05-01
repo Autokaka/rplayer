@@ -16,29 +16,29 @@
 namespace rplayer {
 
 // static
-void RplayerPlugin::RegisterWithRegistrar(
-    flutter::PluginRegistrarWindows *registrar) {
+void RPlayerPlugin::RegisterWithRegistrar(
+    flutter::PluginRegistrarWindows* registrar) {
   auto channel =
       std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
           registrar->messenger(), "rplayer",
           &flutter::StandardMethodCodec::GetInstance());
 
-  auto plugin = std::make_unique<RplayerPlugin>();
+  auto plugin = std::make_unique<RPlayerPlugin>();
 
   channel->SetMethodCallHandler(
-      [plugin_pointer = plugin.get()](const auto &call, auto result) {
+      [plugin_pointer = plugin.get()](const auto& call, auto result) {
         plugin_pointer->HandleMethodCall(call, std::move(result));
       });
 
   registrar->AddPlugin(std::move(plugin));
 }
 
-RplayerPlugin::RplayerPlugin() {}
+RPlayerPlugin::RPlayerPlugin() {}
 
-RplayerPlugin::~RplayerPlugin() {}
+RPlayerPlugin::~RPlayerPlugin() {}
 
-void RplayerPlugin::HandleMethodCall(
-    const flutter::MethodCall<flutter::EncodableValue> &method_call,
+void RPlayerPlugin::HandleMethodCall(
+    const flutter::MethodCall<flutter::EncodableValue>& method_call,
     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
   if (method_call.method_name().compare("getPlatformVersion") == 0) {
     std::ostringstream version_stream;

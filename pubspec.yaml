@@ -4,7 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: '>=2.18.0-10.0.dev <3.0.0'
+  sdk: ">=2.18.0-10.0.dev <3.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
@@ -15,8 +15,6 @@ dependencies:
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
@@ -37,14 +35,14 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.dshitpie.rplayer.rplayer
-        pluginClass: RplayerPlugin
+        package: com.dshitpie.rplayer
+        pluginClass: RPlayerPlugin
       ios:
-        pluginClass: RplayerPlugin
+        pluginClass: RPlayerPlugin
       windows:
-        pluginClass: RplayerPluginCApi
+        pluginClass: RPlayerPluginCApi
       web:
-        pluginClass: RplayerWeb
+        pluginClass: RPlayerWeb
         fileName: rplayer_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:

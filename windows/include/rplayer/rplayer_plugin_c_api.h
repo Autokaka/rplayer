@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-FLUTTER_PLUGIN_EXPORT void RplayerPluginCApiRegisterWithRegistrar(
+FLUTTER_PLUGIN_EXPORT void RPlayerPluginCApiRegisterWithRegistrar(
     FlutterDesktopPluginRegistrarRef registrar);
 
 #if defined(__cplusplus)

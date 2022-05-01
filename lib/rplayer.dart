@@ -1,8 +1,7 @@
-
 import 'rplayer_platform_interface.dart';
 
-class Rplayer {
+class RPlayer {
   Future<String?> getPlatformVersion() {
-    return RplayerPlatform.instance.getPlatformVersion();
+    return RPlayerPlatform.instance.getPlatformVersion();
   }
 }

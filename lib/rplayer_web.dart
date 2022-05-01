@@ -8,13 +8,13 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'rplayer_platform_interface.dart';
 
-/// A web implementation of the RplayerPlatform of the Rplayer plugin.
-class RplayerWeb extends RplayerPlatform {
-  /// Constructs a RplayerWeb
-  RplayerWeb();
+/// A web implementation of the RPlayerPlatform of the RPlayer plugin.
+class RPlayerWeb extends RPlayerPlatform {
+  /// Constructs a RPlayerWeb
+  RPlayerWeb();
 
   static void registerWith(Registrar registrar) {
-    RplayerPlatform.instance = RplayerWeb();
+    RPlayerPlatform.instance = RPlayerWeb();
   }
 
   /// Returns a [String] containing the version of the platform.

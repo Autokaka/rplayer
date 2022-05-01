@@ -2,23 +2,23 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'rplayer_method_channel.dart';
 
-abstract class RplayerPlatform extends PlatformInterface {
-  /// Constructs a RplayerPlatform.
-  RplayerPlatform() : super(token: _token);
+abstract class RPlayerPlatform extends PlatformInterface {
+  /// Constructs a RPlayerPlatform.
+  RPlayerPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static RplayerPlatform _instance = MethodChannelRplayer();
+  static RPlayerPlatform _instance = MethodChannelRPlayer();
 
-  /// The default instance of [RplayerPlatform] to use.
+  /// The default instance of [RPlayerPlatform] to use.
   ///
-  /// Defaults to [MethodChannelRplayer].
-  static RplayerPlatform get instance => _instance;
-  
+  /// Defaults to [MethodChannelRPlayer].
+  static RPlayerPlatform get instance => _instance;
+
   /// Platform-specific implementations should set this with their own
-  /// platform-specific class that extends [RplayerPlatform] when
+  /// platform-specific class that extends [RPlayerPlatform] when
   /// they register themselves.
-  static set instance(RplayerPlatform instance) {
+  static set instance(RPlayerPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
