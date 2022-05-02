@@ -24,6 +24,12 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 31
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['../lib/cpp/vendor/ffmpeg/android']
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -31,5 +37,14 @@ android {
 
     defaultConfig {
         minSdkVersion 16
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "../lib/cpp/CMakeLists.txt"
+        }
     }
 }

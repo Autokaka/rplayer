@@ -13,9 +13,20 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  ffi: ^1.1.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
+  ffigen: ^4.1.3
+
+ffigen:
+  output: "lib/rplayer_ffi.g.dart"
+  headers:
+    entry-points:
+      - "lib/cpp/include/rplayer/crplayer.h"
+  compiler-opts:
+    - "-Ilib/cpp/include"
+    - "-Ilib/cpp/src"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
