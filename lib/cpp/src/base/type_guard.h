@@ -3,11 +3,11 @@
  */
 
 template <typename PointerType>
-bool isNull(PointerType p) {
+bool isNull(const PointerType& p) {
   return p == nullptr;
 }
 
 template <typename PointerType>
-bool isNull(PointerType* p) {
+bool isNull(const PointerType*& p) {
   return p == nullptr;
 }

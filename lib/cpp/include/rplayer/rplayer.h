@@ -8,6 +8,7 @@
 
 #include "base/macros.h"
 #include "decoder.h"
+#include "renderer.h"
 
 class RPlayer final : public PlayerLike, PlayerLikeDelegate {
  public:
@@ -28,6 +29,7 @@ class RPlayer final : public PlayerLike, PlayerLikeDelegate {
 
  private:
   RDecoder decoder_;
+  RRenderer renderer_;
 
   DISALLOW_COPY_ASSIGN_AND_MOVE(RPlayer);
 };

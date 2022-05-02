@@ -12,21 +12,25 @@ RPlayerPtr RPlayer::CreateFromURL(const std::string& url) {
 
 RPlayer::RPlayer(const std::string& url) : decoder_(url) {
   decoder_.delegate = this;
+  renderer_.delegate = this;
 }
 
 void RPlayer::Play() {
   PlayerLike::Play();
   decoder_.Play();
+  renderer_.Play();
 }
 
 void RPlayer::Pause() {
   PlayerLike::Pause();
   decoder_.Pause();
+  renderer_.Pause();
 }
 
 void RPlayer::Stop() {
   PlayerLike::Stop();
   decoder_.Stop();
+  renderer_.Stop();
 }
 
 // Delegate
