@@ -7,9 +7,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
 
 add_subdirectory(vendor/ffmpeg)
 
-file(GLOB_RECURSE SRC "*" "**/*")
-add_library(rplayer SHARED ${SRC})
-target_link_libraries(rplayer PRIVATE ffmpeg)
+if(ANDROID)
+  add_subdirectory(vendor/glstub)
 
-target_include_directories(rplayer PUBLIC include)
-target_include_directories(rplayer PRIVATE src)
+  file(GLOB_RECURSE SRC "*" "**/*")
+  add_library(rplayer SHARED ${SRC})
+  target_link_libraries(rplayer PRIVATE ffmpeg glstub)
+
+  target_include_directories(rplayer PUBLIC include)
+  target_include_directories(rplayer PRIVATE src)
+endif()
