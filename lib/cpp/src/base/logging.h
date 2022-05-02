@@ -45,12 +45,12 @@ class VoidStream final {
 class Log {
  public:
   Log(const LogLevel& level, const std::string_view& file, const int& line);
-  virtual ~Log() = default;
+  ~Log();
 
-  std::ostringstream& stream() { return _stream; }
+  std::ostringstream& stream() { return stream_; }
 
  protected:
-  std::ostringstream _stream;
+  std::ostringstream stream_;
   const LogLevel& _logLevel;
 
   DISALLOW_COPY_ASSIGN_AND_MOVE(Log);

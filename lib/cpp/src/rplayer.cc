@@ -4,6 +4,8 @@
 
 #include <rplayer/rplayer.h>
 
+#include "base/logging.h"
+
 RPlayerPtr RPlayer::CreateFromURL(const std::string& url) {
   return std::make_shared<RPlayer>(url);
 }
@@ -35,6 +37,7 @@ void RPlayer::PlayerThrowsError(const std::string& error) {
   std::scoped_lock lock(mutex_);
   status_ = RPlayerStatus::kFailed;
   error_ = error;
+  LOG(ERROR) << error;
 }
 
 void RPlayer::PlayerStatusWillChange(RPlayerStatus status) {

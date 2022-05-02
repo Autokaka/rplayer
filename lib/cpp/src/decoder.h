@@ -20,13 +20,29 @@ extern "C" {
 #include "base/macros.h"
 #include "player_like.h"
 
+class ScopedDecoderData {
+ public:
+  explicit ScopedDecoderData() = default;
+  ~ScopedDecoderData();
+
+  AVFormatContext* format_ctx = nullptr;
+  AVCodecContext* codec_ctx = nullptr;
+
+  SwsContext* sws_ctx = nullptr;
+  AVFrame* out_frame = nullptr;
+
+  AVFrame* decode_frame = nullptr;
+  AVPacket* decode_packet = nullptr;
+
+  DISALLOW_COPY_ASSIGN_AND_MOVE(ScopedDecoderData);
+};
+
 class RDecoder final : public PlayerLike {
  public:
   explicit RDecoder(const std::string& url);
-  ~RDecoder();
 
  private:
-  std::unique_ptr<class ScopedDecoderData> data_;
+  std::unique_ptr<ScopedDecoderData> data_;
   std::thread decode_thread_;
 
   int OpenCodecSafely(

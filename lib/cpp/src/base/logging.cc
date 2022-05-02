@@ -23,7 +23,7 @@ bool LogLevel::reachEndurance() const {
 
 Log::Log(const LogLevel& level, const std::string_view& file, const int& line)
     : _logLevel(level) {
-  _stream << "[" << level.toString() << "](" << file << ":" << line << ") ";
+  stream_ << "[" << level.toString() << "](" << file << ":" << line << ") ";
 }
 
 }  // namespace forge

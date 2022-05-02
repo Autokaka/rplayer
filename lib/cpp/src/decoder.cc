@@ -6,56 +6,41 @@
 #include "base/logging.h"
 #include "base/type_guard.h"
 
-class ScopedDecoderData {
- public:
-  explicit ScopedDecoderData() = default;
-  ~ScopedDecoderData() {
-    if (sws_ctx) {
-      sws_freeContext(sws_ctx);
-      sws_ctx = nullptr;
-    }
-
-    if (out_frame) {
-      av_frame_free(&out_frame);
-      out_frame = nullptr;
-    }
-
-    if (decode_frame) {
-      av_frame_free(&decode_frame);
-      decode_frame = nullptr;
-    }
-
-    if (decode_packet) {
-      av_packet_free(&decode_packet);
-      decode_packet = nullptr;
-    }
-
-    if (codec_ctx) {
-      avcodec_close(codec_ctx);
-      avcodec_free_context(&codec_ctx);
-      codec_ctx = nullptr;
-    }
-
-    if (format_ctx) {
-      avformat_close_input(&format_ctx);
-      avformat_free_context(format_ctx);
-      format_ctx = nullptr;
-    }
-
-    avformat_network_deinit();
+ScopedDecoderData::~ScopedDecoderData() {
+  if (sws_ctx) {
+    sws_freeContext(sws_ctx);
+    sws_ctx = nullptr;
   }
 
-  AVFormatContext* format_ctx = nullptr;
-  AVCodecContext* codec_ctx = nullptr;
+  if (out_frame) {
+    av_frame_free(&out_frame);
+    out_frame = nullptr;
+  }
 
-  SwsContext* sws_ctx = nullptr;
-  AVFrame* out_frame = nullptr;
+  if (decode_frame) {
+    av_frame_free(&decode_frame);
+    decode_frame = nullptr;
+  }
 
-  AVFrame* decode_frame = nullptr;
-  AVPacket* decode_packet = nullptr;
+  if (decode_packet) {
+    av_packet_free(&decode_packet);
+    decode_packet = nullptr;
+  }
 
-  DISALLOW_COPY_ASSIGN_AND_MOVE(ScopedDecoderData);
-};
+  if (codec_ctx) {
+    avcodec_close(codec_ctx);
+    avcodec_free_context(&codec_ctx);
+    codec_ctx = nullptr;
+  }
+
+  if (format_ctx) {
+    avformat_close_input(&format_ctx);
+    avformat_free_context(format_ctx);
+    format_ctx = nullptr;
+  }
+
+  avformat_network_deinit();
+}
 
 RDecoder::RDecoder(const std::string& url) {
   decode_thread_ = std::thread([&]() {
