@@ -25,7 +25,7 @@ RPlayerPtr FindRPlayerById(int id) {
 }
 
 int AllocIdForRPlayer(const RPlayerPtr& rplayer) {
-  std::lock_guard lock(rplayer_mutex_);
+  std::scoped_lock lock(rplayer_mutex_);
   for (auto&& player : players_) {
     if (player.second == rplayer) {
       return player.first;
@@ -47,7 +47,7 @@ int RPlayer_CreateFromURL(const char* url) {
 }
 
 int RPlayer_GetStatus(int id) {
-  std::lock_guard lock(rplayer_mutex_);
+  std::scoped_lock lock(rplayer_mutex_);
   auto player = FindRPlayerById(id);
 
   if (isNull(player)) {
@@ -57,7 +57,7 @@ int RPlayer_GetStatus(int id) {
 }
 
 const char* RPlayer_GetError(int id) {
-  std::lock_guard lock(rplayer_mutex_);
+  std::scoped_lock lock(rplayer_mutex_);
   auto player = FindRPlayerById(id);
 
   if (isNull(player)) {
@@ -67,7 +67,7 @@ const char* RPlayer_GetError(int id) {
 }
 
 void RPlayer_Play(int id) {
-  std::lock_guard lock(rplayer_mutex_);
+  std::scoped_lock lock(rplayer_mutex_);
   auto player = FindRPlayerById(id);
 
   if (isNull(player)) {
@@ -77,7 +77,7 @@ void RPlayer_Play(int id) {
 }
 
 void RPlayer_Pause(int id) {
-  std::lock_guard lock(rplayer_mutex_);
+  std::scoped_lock lock(rplayer_mutex_);
   auto player = FindRPlayerById(id);
 
   if (isNull(player)) {
@@ -89,7 +89,7 @@ void RPlayer_Pause(int id) {
 void RPlayer_Release(int id) {
   RPlayer_Pause(id);
 
-  std::lock_guard lock(rplayer_mutex_);
+  std::scoped_lock lock(rplayer_mutex_);
   players_.erase(id);
 }
 
