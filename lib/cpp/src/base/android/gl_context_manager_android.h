@@ -5,23 +5,24 @@
 #pragma once
 
 #include <EGL/egl.h>
+#include <memory>
 
 #include "base/macros.h"
 #include "jni_weak_ref.h"
 
 class GLContextManagerAndroid final {
  public:
-  explicit GLContextManagerAndroid();
+  using GLContextManagerAndroidPtr = std::unique_ptr<GLContextManagerAndroid>;
+
+  static GLContextManagerAndroidPtr Create();
+  explicit GLContextManagerAndroid() = default;
   ~GLContextManagerAndroid();
 
-  bool Initialize();
   void Release();
 
-  bool SetSurface(ANativeWindow* window);
+  bool SetSurface(ANativeWindow* window = nullptr);
 
   bool PresentRenderbuffer();
-  bool MakeCurrent();
-  bool MakeNoCurrent();
 
   EGLint GetSurfaceWidth() const { return surface_width_; }
   EGLint GetSurfaceHeight() const { return surface_height_; }
@@ -36,13 +37,9 @@ class GLContextManagerAndroid final {
   EGLint surface_width_ = 0;
   EGLint surface_height_ = 0;
 
-  EGLContext CreateContext(EGLDisplay display,
-                           EGLConfig config,
-                           EGLContext shared_context);
-  void DestroyContext();
   bool MakeCurrent(EGLContext context, EGLSurface surface);
-
-  void DestroySurface();
 
   DISALLOW_COPY_ASSIGN_AND_MOVE(GLContextManagerAndroid);
 };
+
+using GLContextManagerAndroidPtr = std::unique_ptr<GLContextManagerAndroid>;

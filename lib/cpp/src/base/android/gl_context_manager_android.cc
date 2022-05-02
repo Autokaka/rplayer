@@ -2,17 +2,13 @@
  * Created by Autokaka (qq1909698494@gmail.com) on 2022/05/02.
  */
 
-#include <mutex>
-#include <thread>
-
 #include <EGL/egl.h>
-#include <EGL/eglplatform.h>
 #include <glstub/gl3stub.h>
 
 #include <android/native_window.h>
-#include <android/native_window_jni.h>
 
 #include "base/logging.h"
+#include "base/type_guard.h"
 #include "gl_context_manager_android.h"
 #include "jni_util.h"
 
@@ -24,26 +20,37 @@ static bool g_gl3stub_init_success = false;
 const EGLint kGl3ContextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_NONE};
 const EGLint kGl2ContextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
 
+EGLContext CreateContext(EGLDisplay display,
+                         EGLConfig config,
+                         EGLContext shared_context) {
+  if (g_gl3stub_init_success) {
+    EGLContext context =
+        eglCreateContext(display, config, shared_context, kGl3ContextAttribs);
+    if (context) {
+      return context;
+    }
+  }
+  return eglCreateContext(display, config, shared_context, kGl2ContextAttribs);
+}
+
 }  // namespace
 
-GLContextManagerAndroid::GLContextManagerAndroid() {
+GLContextManagerAndroidPtr GLContextManagerAndroid::Create() {
   std::call_once(g_gl3stub_init_flag,
                  []() { g_gl3stub_init_success = (gl3stubInit() == GL_TRUE); });
-}
 
-GLContextManagerAndroid::~GLContextManagerAndroid() {
-  JNI_CHECK(display_ == EGL_NO_DISPLAY, "");
-}
+  auto context_manager = std::make_unique<GLContextManagerAndroid>();
 
-bool GLContextManagerAndroid::Initialize() {
-  if ((display_ = eglGetDisplay(EGL_DEFAULT_DISPLAY)) == EGL_NO_DISPLAY) {
+  EGLDisplay display = context_manager->display_;
+  display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+  if (display == EGL_NO_DISPLAY) {
     LOG(ERROR) << "eglGetDisplay() returned error: " << eglGetError();
-    return false;
+    return nullptr;
   }
 
-  if (!eglInitialize(display_, nullptr, nullptr)) {
+  if (!eglInitialize(display, nullptr, nullptr)) {
     LOG(ERROR) << "eglInitialize() returned error: " << eglGetError();
-    return false;
+    return nullptr;
   }
 
   const EGLint buffer_attribs[] = {EGL_RENDERABLE_TYPE,
@@ -62,63 +69,41 @@ bool GLContextManagerAndroid::Initialize() {
 
   EGLint num_configs;
 
-  if (!eglChooseConfig(display_, buffer_attribs, &config_, 1, &num_configs)) {
+  EGLConfig config = context_manager->config_;
+  if (!eglChooseConfig(display, buffer_attribs, &config, 1, &num_configs)) {
     LOG(ERROR) << "eglChooseConfig() returned error: " << eglGetError();
-    Release();
-    return false;
+    return nullptr;
   }
 
-  if (!(context_ = CreateContext(display_, config_, nullptr))) {
+  EGLContext context = context_manager->context_;
+  context = CreateContext(display, config, nullptr);
+  if (isNull(context)) {
     LOG(ERROR) << "eglCreateContext() returned error: " << eglGetError();
-    Release();
-    return false;
+    return nullptr;
   }
 
-  return true;
+  return std::move(context_manager);
 }
 
-EGLContext GLContextManagerAndroid::CreateContext(EGLDisplay display,
-                                                  EGLConfig config,
-                                                  EGLContext shared_context) {
-  if (g_gl3stub_init_success) {
-    EGLContext context =
-        eglCreateContext(display, config, shared_context, kGl3ContextAttribs);
-    if (context) {
-      return context;
-    }
-  }
-  return eglCreateContext(display, config, shared_context, kGl2ContextAttribs);
-}
+GLContextManagerAndroid::~GLContextManagerAndroid() {
+  MakeCurrent(EGL_NO_CONTEXT, EGL_NO_SURFACE);
 
-void GLContextManagerAndroid::DestroyContext() {
   if (context_ != EGL_NO_CONTEXT) {
     eglDestroyContext(display_, context_);
     context_ = EGL_NO_CONTEXT;
   }
-}
 
-void GLContextManagerAndroid::Release() {
-  MakeNoCurrent();
-
-  DestroyContext();
-
-  DestroySurface();
+  if (surface_ != EGL_NO_SURFACE) {
+    eglDestroySurface(display_, surface_);
+    surface_ = EGL_NO_SURFACE;
+  }
 
   if (display_ != EGL_NO_DISPLAY) {
     eglTerminate(display_);
-
     display_ = EGL_NO_DISPLAY;
   }
 
   config_ = nullptr;
-}
-
-bool GLContextManagerAndroid::MakeCurrent() {
-  return MakeCurrent(context_, surface_);
-}
-
-bool GLContextManagerAndroid::MakeNoCurrent() {
-  return MakeCurrent(EGL_NO_CONTEXT, EGL_NO_SURFACE);
 }
 
 bool GLContextManagerAndroid::MakeCurrent(EGLContext context,
@@ -132,52 +117,53 @@ bool GLContextManagerAndroid::MakeCurrent(EGLContext context,
 }
 
 bool GLContextManagerAndroid::SetSurface(ANativeWindow* window) {
-  if (context_ == EGL_NO_CONTEXT || !window) {
+  if (context_ == EGL_NO_CONTEXT) {
     return false;
   }
 
-  DestroySurface();
+  if (isNull(window)) {
+    // Destroy current surface
+    MakeCurrent(context_, EGL_NO_SURFACE);
+
+    if (surface_ != EGL_NO_SURFACE) {
+      eglDestroySurface(display_, surface_);
+      surface_ = EGL_NO_SURFACE;
+    }
+
+    return true;
+  }
+
+  SetSurface();
 
   EGLint format;
   if (!eglGetConfigAttrib(display_, config_, EGL_NATIVE_VISUAL_ID, &format)) {
     LOG(ERROR) << "eglGetConfigAttrib() returned error: " << eglGetError();
-    DestroySurface();
+    SetSurface();
     return false;
   }
 
   ANativeWindow_setBuffersGeometry(window, 0, 0, format);
 
-  if (!(surface_ =
-            eglCreateWindowSurface(display_, config_, window, nullptr))) {
+  surface_ = eglCreateWindowSurface(display_, config_, window, nullptr);
+  if (isNull(surface_)) {
     LOG(ERROR) << "eglCreateWindowSurface() returned error: " << eglGetError();
-    DestroySurface();
+    SetSurface();
     return false;
   }
 
   if (!MakeCurrent(context_, surface_)) {
-    DestroySurface();
+    SetSurface();
     return false;
   }
 
   if (!eglQuerySurface(display_, surface_, EGL_WIDTH, &surface_width_) ||
       !eglQuerySurface(display_, surface_, EGL_HEIGHT, &surface_height_)) {
     LOG(ERROR) << "eglQuerySurface() returned error: " << eglGetError();
-    DestroySurface();
+    SetSurface();
     return false;
   }
 
   return true;
-}
-
-void GLContextManagerAndroid::DestroySurface() {
-  if (context_ != EGL_NO_CONTEXT) {
-    MakeCurrent(context_, EGL_NO_SURFACE);
-  }
-
-  if (surface_ != EGL_NO_SURFACE) {
-    eglDestroySurface(display_, surface_);
-    surface_ = EGL_NO_SURFACE;
-  }
 }
 
 bool GLContextManagerAndroid::PresentRenderbuffer() {
@@ -189,5 +175,6 @@ bool GLContextManagerAndroid::PresentRenderbuffer() {
     LOG(ERROR) << "eglSwapBuffers() returned error: " << eglGetError();
     return false;
   }
+
   return true;
 }
