@@ -8,7 +8,6 @@
 
 #include "base/macros.h"
 #include "decoder.h"
-#include "player_like.h"
 
 class RPlayer final : public PlayerLike, PlayerLikeDelegate {
  public:
