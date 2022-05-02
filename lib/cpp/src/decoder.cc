@@ -44,7 +44,8 @@ ScopedDecoderData::~ScopedDecoderData() {
 
 RDecoder::RDecoder(const std::string& url) {
   decode_thread_ = std::thread([&]() {
-    data_ = std::make_unique<ScopedDecoderData>();
+    const auto data = std::make_unique<ScopedDecoderData>();
+    data_ = data.get();
 
     /**
      * Init avformat and start the network components.
@@ -56,14 +57,14 @@ RDecoder::RDecoder(const std::string& url) {
      * Create format context and open video stream.
      */
     AVDictionary* options = nullptr;
-    data_->format_ctx = avformat_alloc_context();
+    data->format_ctx = avformat_alloc_context();
     av_dict_set(&options, "fflags", "nobuffer", 0);
     av_dict_set(&options, "buffer_size", "4096000", 0);
     av_dict_set(&options, "stimeout", "2000000", 0);
     av_dict_set(&options, "max_delay", "5000", 0);
     // av_dict_set(&options, "rtsp_transport", "tcp", 0);
     int result =
-        avformat_open_input(&data_->format_ctx, url.c_str(), nullptr, &options);
+        avformat_open_input(&data->format_ctx, url.c_str(), nullptr, &options);
     if (result < 0) {
       if (delegate) {
         delegate->PlayerThrowsError("Failed on avformat_open_input: " +
@@ -85,7 +86,7 @@ RDecoder::RDecoder(const std::string& url) {
      */
     av_dict_set(&options, "probesize", "32", 0);
     av_dict_set(&options, "analyzeduration", "0", 0);
-    if (avformat_find_stream_info(data_->format_ctx, nullptr) < 0) {
+    if (avformat_find_stream_info(data->format_ctx, nullptr) < 0) {
       if (delegate) {
         delegate->PlayerThrowsError("Failed to read video info from stream.");
       }
@@ -93,9 +94,9 @@ RDecoder::RDecoder(const std::string& url) {
     }
     int video_stream_index = -1;
     LOG(INFO) << "Stream info: current streams:"
-              << data_->format_ctx->nb_streams;
+              << data->format_ctx->nb_streams;
     video_stream_index = av_find_best_stream(
-        data_->format_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
+        data->format_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, nullptr, 0);
     if (video_stream_index < 0) {
       if (delegate) {
         delegate->PlayerThrowsError("Failed to find video stream.");
@@ -108,7 +109,7 @@ RDecoder::RDecoder(const std::string& url) {
      * Find suitable stream decoder by codec_id.
      */
     AVCodecParameters* codec_params =
-        data_->format_ctx->streams[video_stream_index]->codecpar;
+        data->format_ctx->streams[video_stream_index]->codecpar;
     result = OpenCodecSafely(codec_params);
     if (result != 0) {
       if (delegate) {
@@ -127,9 +128,9 @@ RDecoder::RDecoder(const std::string& url) {
       delegate->PlayerStatusWillChange(RPlayerStatus::kReadyToPlay);
       delegate->PlayerStatusDidChange(RPlayerStatus::kReadyToPlay);
     }
-    data_->decode_frame = av_frame_alloc();
-    data_->decode_packet = av_packet_alloc();
-    while (av_read_frame(data_->format_ctx, data_->decode_packet) == 0) {
+    data->decode_frame = av_frame_alloc();
+    data->decode_packet = av_packet_alloc();
+    while (av_read_frame(data->format_ctx, data->decode_packet) == 0) {
       std::scoped_lock lock(mutex_);
 
       if (is_stopped_) {
@@ -138,8 +139,8 @@ RDecoder::RDecoder(const std::string& url) {
       }
 
       if (!is_playing_ ||
-          data_->decode_packet->stream_index != video_stream_index) {
-        av_packet_unref(data_->decode_packet);
+          data->decode_packet->stream_index != video_stream_index) {
+        av_packet_unref(data->decode_packet);
         continue;
       }
 
@@ -159,12 +160,12 @@ RDecoder::RDecoder(const std::string& url) {
       //   continue;
       // }
       int gop[1] = {0};
-      result = avcodec_decode_video2(data_->codec_ctx, data_->decode_frame, gop,
-                                     data_->decode_packet);
+      result = avcodec_decode_video2(data->codec_ctx, data->decode_frame, gop,
+                                     data->decode_packet);
       if (result < 0) {
         // LOG::E("Failed on avcodec_decode_video2: %s",
         // av_err2str(decodeResult));
-        avcodec_flush_buffers(data_->codec_ctx);
+        avcodec_flush_buffers(data->codec_ctx);
         continue;
       }
     }

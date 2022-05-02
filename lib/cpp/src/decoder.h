@@ -42,8 +42,8 @@ class RDecoder final : public PlayerLike {
   explicit RDecoder(const std::string& url);
 
  private:
-  std::unique_ptr<ScopedDecoderData> data_;
   std::thread decode_thread_;
+  ScopedDecoderData* data_;
 
   int OpenCodecSafely(
       const AVCodecParameters* codec_params,
