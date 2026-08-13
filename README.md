@@ -1,3 +1,5 @@
+
+
 # RPlayer
 
 Flutter RTSP low latency video player for Android TV only. This player is intended to use FFmpeg under the hood to decode RTSP streams and Android SurfaceView to draw in native code. If time permits, I'll try to use OpenGLES as its backend renderer and OpenSLES as its audio solution. For now I only achieved video decode part.
@@ -42,7 +44,7 @@ RPlayerConfig configures how videos will be played. You could only create a RPla
 var rplayerConfig = RPlayerConfig()
   ..retryTimesOnDisconnect = 10
   ..retryDelayInMilliseconds = 2000
-  ..preferHardcodec = 1;
+  ..preferHardcodec = true;
 ```
 
 - **retryTimesOnDisconnect**: Determine how many times the player will retry to connect when stream is closed.
@@ -57,4 +59,3 @@ RPlayerState exposes the inner state of RPlayer. The states are as follows:
 - STOPPED:
 - BUFFERING:
 - PLAYING:
-
